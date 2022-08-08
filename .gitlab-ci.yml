@@ -14,6 +14,10 @@ include:
      file:
         - /ci/jobs/auto-release.yml
         - /ci/lib/pytest-template.yml
-        - /ci/jobs/py37.yml
+        - /ci/jobs/check-merge-request-title.yml
         - /ci/jobs/py38.yml
         - /ci/jobs/py39.yml
+
+.tox-template:
+   variables:
+     PIP_INDEX_URL: "https://pypi.org/simple"

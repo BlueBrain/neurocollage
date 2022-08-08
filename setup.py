@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""Setup for the NeuroCollage package."""
 import importlib.util
 from pathlib import Path
 
@@ -27,17 +27,45 @@ setup(
         "Source": "git@bbpgitlab.epfl.ch:neuromath/NeuroCollage.git",
     },
     license="BBP-internal-confidential",
-    install_requires=[],
-    packages=find_packages(),
-    python_requires=">=3.7",
-    extras_require={"docs": ["m2r2", "sphinx", "sphinx-bluebrain-theme"]},
+    install_requires=[
+        "atlas_analysis>=0.0.3",
+        "brainbuilder",
+        "click>=8.1.3",
+        "joblib",
+        "matplotlib",
+        "morph_tool",
+        "neurom>=3.2",
+        "NeuroTS>=3.1.1",
+        "numpy>=1.23",
+        "pandas>=1.4",
+        "pyquaternion",
+        "region_grower>=0.4.0",
+        "scipy>=1.8",
+        "tqdm>=4.6",
+        "voxcell>=3.1.2",
+        "docutils<0.19",  # related to https://github.com/CrossNox/m2r2/issues/52
+    ],
+    packages=find_packages(exclude=["tests"]),
+    python_requires=">=3.8",
+    extras_require={
+        "docs": ["m2r2", "sphinx", "sphinx-bluebrain-theme", "sphinx-click"],
+        "test": [
+            "mock",
+            "pytest",
+            "pytest-click",
+            "pytest-cov",
+            "pytest-html",
+        ],
+    },
+    entry_points={
+        "console_scripts": ["neuro-collage=neurocollage.cli:main"],
+    },
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Topic :: Scientific/Engineering :: Bio-Informatics",

@@ -1,0 +1,20 @@
+layers:
+- SLM
+- SR
+- SP
+- SO
+names:
+  SLM: SLM
+  SR: SR
+  SP: SP
+  SO: SO
+region_queries:
+  SLM: 'SLM'
+  SR: 'SR'
+  SP: 'SP'
+  SO: 'SO'
+thicknesses:
+  SLM: 165
+  SR: 149
+  SP: 353
+  SO: 190

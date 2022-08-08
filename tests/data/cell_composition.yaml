@@ -1,0 +1,9 @@
+version: v2.0
+neurons:
+- density: '{[cell_density]L2_TPC:A}'
+  region: '@2$'
+  traits:
+    layer: 2
+    mtype: L2_TPC:A
+    etype:
+      cADpyr: 1.0

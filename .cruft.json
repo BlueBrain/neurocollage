@@ -1,0 +1,25 @@
+{
+  "template": "git@bbpgitlab.epfl.ch:neuromath/cookiecutter-python.git",
+  "commit": "89f818508e3456501358b16a8aa33b8884bd925f",
+  "context": {
+    "cookiecutter": {
+      "author_name": "bbp-ou-cells",
+      "author_email": "bbp-ou-cells@groupes.epfl.ch",
+      "maintainer": "Alexis Arnaudon",
+      "project_name": "NeuroCollage",
+      "package_name": "neurocollage",
+      "repository_destination": "gitlab",
+      "version": "0.1.0.dev0",
+      "description": "A tool to create 2D morphology collage plots based on matplotlib.",
+      "team_name": "neuromath",
+      "repository": "neuromath/NeuroCollage",
+      "download_url": "git@bbpgitlab.epfl.ch:neuromath/NeuroCollage.git",
+      "tracker_url": "https://bbpteam.epfl.ch/project/issues/projects/CELLS/issues",
+      "project_url": "https://bbpteam.epfl.ch/documentation/projects/NeuroCollage",
+      "year": "2022",
+      "today": "08 July 2022",
+      "_template": "git@bbpgitlab.epfl.ch:neuromath/cookiecutter-python.git"
+    }
+  },
+  "directory": null
+}

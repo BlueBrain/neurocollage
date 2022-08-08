@@ -6,4 +6,6 @@ This page presents the complete API documentation.
 .. autosummary::
     :toctree: generated
 
-    neurocollage.example
+    neurocollage.collage
+    neurocollage.planes
+    neurocollage.loader

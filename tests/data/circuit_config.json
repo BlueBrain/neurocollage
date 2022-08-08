@@ -1,0 +1,31 @@
+{
+  "version": 2.3,
+  "components": {
+    "morphologies_dir": ".",
+    "synaptic_models_dir": ".",
+    "point_neuron_models_dir": ".",
+    "mechanisms_dir": ".",
+    "biophysical_neuron_models_dir": ".",
+    "templates_dir": "."
+  },
+  "manifest": {
+      "$BASE_DIR": "."
+  },
+  "networks": {
+    "nodes": [
+      {
+        "nodes_file": "$BASE_DIR/nodes.sonata",
+        "populations": {
+          "S1": {
+            "type": "biophysical",
+            "morphologies_dir": "./",
+            "alternate_morphologies": {
+                "neurolucida-asc": "input-cells",
+                "h5v1": "input-cells"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

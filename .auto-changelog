@@ -7,5 +7,5 @@
     "commitUrl": "https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/-/commit/{id}",
     "issueUrl": "https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/issues/{id}",
     "mergeUrl": "https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/merge-requests/{id}",
-    "compareUrl": "https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/{from}...{to}",
+    "compareUrl": "https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/{from}...{to}"
 }

@@ -1,13 +1,12 @@
 # Changelog
 
-## [0.1.2](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/neurocollage-v0.1.1...0.1.2)
+## [neurocollage-v0.1.2](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/neurocollage-v0.1.1...neurocollage-v0.1.2)
 
 > 9 August 2022
 
 ### Uncategorized Changes
 
-- Improve doc (Adrien Berchet - [78dd3ce](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/-/commit/78dd3ced6fc915d5c983730cedc7dec3cad1ac7f))
-- Fix version (Adrien Berchet - [9ff5504](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/-/commit/9ff55049b53a85f3f18e20cd4c6d564037efc0f8))
+- Improve doc (Adrien Berchet - [1f62c93](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/-/commit/1f62c9304a68ad21769e161d3cc1054f83bbce2f))
 
 ## [neurocollage-v0.1.1](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/neurocollage-v0.1.0...neurocollage-v0.1.1)
 

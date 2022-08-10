@@ -71,4 +71,4 @@ the configuration file.
 The `examples` folder contains a simple example on `S1` region of `SSCx` with `L5_TPC:A` morphologies. It
 also provides examples of programmatic use of the `NeuroCollage` API with both types of circuit formats.
 
-![](images/collage.png)
+![](doc/source/images/collage.png)

@@ -10,6 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
+import shutil
+import tempfile
+
 from pkg_resources import get_distribution
 
 # -- Project information -----------------------------------------------------
@@ -76,3 +79,31 @@ intersphinx_mapping = {
     # "pandas": ("https://pandas.pydata.org/docs", None),
     "python": ("https://docs.python.org/3", None),
 }
+
+
+_README = "../README.md"
+_README_TMP = tempfile.NamedTemporaryFile()  # pylint: disable=consider-using-with
+self_readme_copy_path = _README_TMP.name
+
+
+def fix_readme(app, _):
+    """Change links in the README that point to a file in the `doc/source` directory."""
+    readme_file = _README
+    shutil.copyfile(readme_file, app.config.self_readme_copy_path)
+    with open(readme_file, "r") as fp:
+        content = fp.read()
+    new_content = content.replace("doc/source/", "")
+    with open(readme_file, "w") as fp:
+        fp.write(new_content)
+
+
+def restore_readme(app, _):
+    """Restore the original README file."""
+    shutil.copyfile(app.config.self_readme_copy_path, _README)
+
+
+def setup(app):
+    """Setup sphinx hooks."""
+    app.add_config_value("self_readme_copy_path", _README_TMP.name, "", ())
+    app.connect("config-inited", fix_readme)
+    app.connect("build-finished", restore_readme)

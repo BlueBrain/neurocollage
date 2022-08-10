@@ -1,5 +1,13 @@
 # Changelog
 
+## [neurocollage-v0.1.3](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/neurocollage-v0.1.2...neurocollage-v0.1.3)
+
+> 10 August 2022
+
+### Documentation Changes
+
+- Improve documentation and add an output image example (Alexis Arnaudon - [edef71a](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/-/commit/edef71aea41444e74ea0a0108e7e8126d83d550b))
+
 ## [neurocollage-v0.1.2](https://bbpgitlab.epfl.ch/neuromath/NeuroCollage/compare/neurocollage-v0.1.1...neurocollage-v0.1.2)
 
 > 9 August 2022

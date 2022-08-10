@@ -16,6 +16,8 @@ def test_cli(cli_runner, data_path, tmpdir, small_O1_path, cell_collection):
             small_O1_path["atlas"],
             "--circuit-path",
             data_path / "circuit_config.json",
+            "--collage-pdf-filename",
+            tmpdir / "collage.pdf",
         ],
     )
     print(result.output)

@@ -60,9 +60,9 @@ def small_O1(small_O1_path):
 
 
 @pytest.fixture(scope="function")
-def cells_df(small_O1_path, layer_annotation):
+def cells_df(tmpdir, small_O1_path, layer_annotation):
     """Raw data for the cell collection."""
-    return generate_cells_df(small_O1_path, layer_annotation)
+    return generate_cells_df(tmpdir, small_O1_path, layer_annotation)
 
 
 def generate_cell_collection(cells_df):
@@ -100,7 +100,7 @@ def make_cell_density(small_O1_path, layer_annotation):
     density_annotation.save_nrrd(f"{small_O1_path['atlas']}/[cell_density]{mtype}.nrrd")
 
 
-def generate_cells_df(small_O1_path, layer_annotation):
+def generate_cells_df(tmpdir, small_O1_path, layer_annotation):
     """Raw data for the cell collection."""
     make_cell_density(small_O1_path, layer_annotation)
 
@@ -111,12 +111,12 @@ def generate_cells_df(small_O1_path, layer_annotation):
             "--composition", str(DATA / "cell_composition.yaml"),
             "--mtype-taxonomy", str(DATA / "mtype_taxonomy.tsv"),
             "--atlas", small_O1_path['atlas'],
-            "--output", "cells.h5",
+            "--output", tmpdir / "cells.h5",
         ],
     )
     # fmt: on
 
-    df = CellCollection.load("cells.h5").as_dataframe()
+    df = CellCollection.load(tmpdir / "cells.h5").as_dataframe()
     morphs = ["C170797A-P1", "C280199C-P3", "C280998A-P3"]
     df["morphology"] = list(islice(cycle(morphs), len(df.index)))
     df["path"] = str(DATA / "input-cells") + "/" + df["morphology"] + ".h5"

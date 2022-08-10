@@ -20,21 +20,31 @@ planes (i.e. collage plots).
 
 The collage requires the following inputs:
 
-* the path to an Atlas directory that can be read by
+* the path to a standard `CircuitConfig`, or the path to a sonata `circuit_config.json` file of
+  a [SONATA circuit](https://sonata-extension.readthedocs.io/en/latest/sonata_overview.html)
+  and the path to an Atlas directory that can be read by
   [Voxcell](https://voxcell.readthedocs.io/en/latest/index.html).
-* the path to a circuit directory or to the `circuit_config.json` file of a
-  [SONATA circuit](https://sonata-extension.readthedocs.io/en/latest/sonata_overview.html).
 * [optional] a configuration file containing the default values used for the CLI arguments (all
   these values are overridden by the ones passed to the CLI). The config file is a `INI` file
   divided in sections. These sections correspond to the first part of the CLI parameter names. For
   example, the `atlas-path` parameter of the CLI corresponds to the `path` parameter of the `atlas`
   section in the configuration file.
 
+### Outputs
+
+This package contains three main functions:
+* `get_layer_annotation`: can generate annotation of layers for plotting or other uses
+* `create_planes`: defines a set of planes to create collage plots, with various algorithms.
+  Planes are sampled along a centerline, which can be straight aligned or not with world
+  coordinates or curved using an algorithm in `atlas_analysis` package. The first and last point
+  of the centerline can be defined manually, or estimated internally to span the given region best.
+* `plot_collage`: make the collage plot, see API for possible arguments.
 
 ### Command
 
 This package provides a CLI whose parameters are described in the Command Line Interface page of
 this documentation. It is also possible to get help from the command:
+
 ```bash
 neuro-collage --help
 ```
@@ -58,6 +68,7 @@ the configuration file.
 
 ## Examples
 
-The `examples` folder contains a simple example that will plot 10 morphologies of `L5_TPC:A` mtype
-in 5 planes of the S1 atlas. It also provides examples of programmatic use of the `NeuroCollage`
-API.
+The `examples` folder contains a simple example on `S1` region of `SSCx` with `L5_TPC:A` morphologies. It
+also provides examples of programmatic use of the `NeuroCollage` API with both types of circuit formats.
+
+![](images/collage.png)

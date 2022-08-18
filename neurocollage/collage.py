@@ -15,6 +15,7 @@ from neurom import load_morphology
 from neurom.view import matplotlib_impl
 from pyquaternion import Quaternion
 from scipy.optimize import fmin
+from sklearn.metrics.pairwise import pairwise_distances
 from voxcell.exceptions import VoxcellError
 
 from neurocollage.planes import get_atlas
@@ -114,6 +115,34 @@ def get_y_info(annotation, atlas, plane_origin, rotation_matrix, n_pixels=64):
     return X, Y, orientation_u, orientation_v
 
 
+def _dpoint2pointcloud(X, i):
+    """Return the distance from the ith point in a Euclidean point cloud
+    to the rest of the points
+
+    Adapted from ripser.py.
+    """
+    ds = pairwise_distances(X, X[i, :][None, :]).flatten()
+    ds[i] = 0
+    return ds
+
+
+def get_greedy_perm(X, sample):
+    """Compute a furthest point sampling permutation of a set of points.
+
+    Adapted from ripser.py
+    """
+    idx_perm = np.zeros(sample, dtype=np.int64)
+
+    ds = _dpoint2pointcloud(X, 0)
+    dperm2all = [ds]
+    for i in range(1, sample):
+        idx = np.argmax(ds)
+        idx_perm[i] = idx
+        dperm2all.append(_dpoint2pointcloud(X, idx))
+        ds = np.minimum(ds, dperm2all[-1])
+    return idx_perm
+
+
 # pylint: disable=too-many-locals
 def plot_cells(
     ax,
@@ -126,6 +155,7 @@ def plot_cells(
     plot_neuron_kwargs=None,
     linear_density=None,
     wire_plot=False,
+    random=False,
 ):
     """Plot cells for collage."""
     if mtype is not None:
@@ -138,7 +168,12 @@ def plot_cells(
     cells_df = get_cells_between_planes(cells_df, plane_left, plane_right)
     gids = []
     if len(cells_df.index) > 0:
-        cells_df = cells_df.sample(n=min(sample, len(cells_df.index)), random_state=42)
+        _sample = min(sample, len(cells_df.index))
+        if random:
+            cells_df = cells_df.sample(n=_sample, random_state=42)
+        else:
+            ids = get_greedy_perm(cells_df[["x", "y", "z"]].to_numpy(), _sample)
+            cells_df = cells_df.iloc[ids]
         gids = cells_df.index
 
     def _wire_plot(morph, ax, lw=0.1):
@@ -198,6 +233,7 @@ def _plot_collage(
     figsize,
     cells_linear_density,
     cells_wire_plot,
+    random,
 ):
     """Internal plot collage for multiprocessing."""
     left_plane, right_plane = planes
@@ -241,6 +277,7 @@ def _plot_collage(
             plot_neuron_kwargs=plot_neuron_kwargs,
             linear_density=cells_linear_density,
             wire_plot=cells_wire_plot,
+            random=random,
         )
     if with_y_field:
         X_y, Y_y, orientation_u, orientation_v = get_y_info(
@@ -290,6 +327,7 @@ def plot_collage(
     cells_linear_density=None,
     cells_wire_plot=False,
     figsize=(20, 20),
+    random=False,
 ):
     """Plot collage of an mtype and a list of planes.
 
@@ -310,6 +348,7 @@ def plot_collage(
         with_cells (bool): plot cells or not
         cells_linear_density (float): apply resampling to plot less points
         cells_wire_plot (bool): if true, do not use neurom.view, but plt.plot
+        random (bool): randomly select cells if True, or select furthest away cells
     """
     Path(pdf_filename).parent.mkdir(parents=True, exist_ok=True)
     with PdfPages(pdf_filename) as pdf:
@@ -328,6 +367,7 @@ def plot_collage(
             cells_linear_density=cells_linear_density,
             cells_wire_plot=cells_wire_plot,
             figsize=figsize,
+            random=random,
         )
         for fig in Parallel(nb_jobs, verbose=joblib_verbose)(
             delayed(f)(planes) for planes in zip(planes[:-1:3], planes[2::3])

@@ -188,6 +188,9 @@ def _select_args(func, kwargs, mapping=None):
     help="Trigger to use `matplotlib.pyplot.plot` instead of `neurom.view`.",
 )
 @click.option(
+    "--random", type=click.BOOL, help="Randomly sample cells, instead of furthest away choice."
+)
+@click.option(
     "--collage-figsize",
     type=TupleParam([click.IntRange(min=0, min_open=True), click.IntRange(min=0, min_open=True)]),
     help="The size of the output figure.",
@@ -249,6 +252,7 @@ def main(**kwargs):
             "collage_figsize": "figsize",
             "collage_nb_jobs": "nb_jobs",
             "collage_joblib_verbose": "joblib_verbose",
+            "random": "random",
         },
     )
 

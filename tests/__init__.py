@@ -1,1 +1,1 @@
-"""Tests for the NeuroCollage package."""
+"""Tests suite for the neurocollage package."""

@@ -1,8 +1,11 @@
-"""NeuroCollage package."""
-import pkg_resources
+"""neurocollage package.
+
+A tool to create 2D morphology collage plots based on matplotlib.
+"""
+import importlib.metadata
 
 from .collage import plot_collage  # noqa: F401
 from .planes import create_planes  # noqa: F401
 from .planes import get_layer_annotation  # noqa: F401
 
-__version__ = pkg_resources.get_distribution("NeuroCollage").version
+__version__ = importlib.metadata.version("neurocollage")

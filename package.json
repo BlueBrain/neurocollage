@@ -1,5 +1,5 @@
 {
-  "name": "NeuroCollage",
+  "name": "neurocollage",
   "auto-changelog": {
     "replaceText": {
       "([bB]reaking: ?)": "",

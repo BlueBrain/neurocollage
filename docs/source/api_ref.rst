@@ -1,4 +1,4 @@
-API reference
+API Reference
 =============
 
 This page presents the complete API documentation.

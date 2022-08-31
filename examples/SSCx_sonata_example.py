@@ -4,7 +4,10 @@ import neurocollage.loader
 
 
 def main():
-    circuit_path = "/gpfs/bbp.cscs.ch/project/proj83/jira-tickets/NSETM-1948-extract-hex-O1/data/S1_data/circuit_config.json"
+    circuit_path = (
+        "/gpfs/bbp.cscs.ch/project/proj83/jira-tickets/NSETM-1948-extract-hex-O1/data/S1_data/"
+        "circuit_config.json"
+    )
     region = "S1"
     mtype = "L5_TPC:A"
     atlas_path = {

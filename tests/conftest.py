@@ -1,4 +1,4 @@
-"""Pytest conftest."""
+"""Configuration for the pytest test suite."""
 # pylint: disable=redefined-outer-name
 from copy import deepcopy
 from itertools import cycle
@@ -27,7 +27,7 @@ def data_path():
 def generate_small_O1(directory):
     """Dump a small O1 atlas in folder path."""
     # fmt: off
-    with open(devnull, "w") as f:
+    with open(devnull, "w", encoding="utf-8") as f:
         call(
             [
                 "brainbuilder", "atlases",

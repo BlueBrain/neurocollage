@@ -12,15 +12,14 @@
 
 import shutil
 import tempfile
-
-from pkg_resources import get_distribution
+from importlib import metadata
 
 # -- Project information -----------------------------------------------------
 
 project = "NeuroCollage"
 
 # The short X.Y version
-version = get_distribution("neurocollage").version
+version = metadata.version("neurocollage")
 
 # The full version, including alpha/beta/rc tags
 release = version
@@ -65,13 +64,23 @@ html_theme = "sphinx-bluebrain-theme"
 # html_static_path = ['_static']
 
 html_theme_options = {
-    "metadata_distribution": project,
+    "metadata_distribution": "neurocollage",
 }
 
 html_title = project
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = False
+
+# autosummary settings
+autosummary_generate = True
+
+# autodoc settings
+autodoc_typehints = "signature"
+autodoc_default_options = {
+    "members": True,
+    "show-inheritance": True,
+}
 
 intersphinx_mapping = {
     # Uncomment these lines if you need them
@@ -90,10 +99,10 @@ def fix_readme(app, _):
     """Change links in the README that point to a file in the `doc/source` directory."""
     readme_file = _README
     shutil.copyfile(readme_file, app.config.self_readme_copy_path)
-    with open(readme_file, "r") as fp:
+    with open(readme_file, "r", encoding="utf-8") as fp:
         content = fp.read()
     new_content = content.replace("doc/source/", "")
-    with open(readme_file, "w") as fp:
+    with open(readme_file, "w", encoding="utf-8") as fp:
         fp.write(new_content)
 
 

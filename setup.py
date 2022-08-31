@@ -1,4 +1,4 @@
-"""Setup for the NeuroCollage package."""
+"""Setup for the neurocollage package."""
 import importlib.util
 from pathlib import Path
 
@@ -13,49 +13,60 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 VERSION = module.VERSION
 
+reqs = [
+    "atlas_analysis>=0.0.3",
+    "brainbuilder",
+    "click>=8.1.3",
+    "joblib",
+    "matplotlib",
+    "morph_tool",
+    "neurom>=3.2",
+    "NeuroTS>=3.1.1",
+    "numpy>=1.23",
+    "pandas>=1.4",
+    "pyquaternion",
+    "region_grower>=0.4.0",
+    "scipy>=1.8",
+    "tqdm>=4.6",
+    "voxcell>=3.1.2",
+    "docutils<0.19",  # related to https://github.com/CrossNox/m2r2/issues/52
+]
+
+doc_reqs = [
+    "m2r2",
+    "sphinx",
+    "sphinx-bluebrain-theme",
+    "sphinx-click",
+]
+
+test_reqs = [
+    "mock",
+    "pytest",
+    "pytest-click",
+    "pytest-cov",
+    "pytest-html",
+]
+
 setup(
     name="neurocollage",
     author="bbp-ou-cells",
     author_email="bbp-ou-cells@groupes.epfl.ch",
-    version=VERSION,
     description="A tool to create 2D morphology collage plots based on matplotlib.",
     long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    url="https://bbpteam.epfl.ch/documentation/projects/NeuroCollage",
+    url="https://bbpteam.epfl.ch/documentation/projects/neurocollage",
     project_urls={
         "Tracker": "https://bbpteam.epfl.ch/project/issues/projects/CELLS/issues",
-        "Source": "git@bbpgitlab.epfl.ch:neuromath/NeuroCollage.git",
+        "Source": "https://bbpgitlab.epfl.ch/neuromath/neurocollage",
     },
     license="BBP-internal-confidential",
-    install_requires=[
-        "atlas_analysis>=0.0.3",
-        "brainbuilder",
-        "click>=8.1.3",
-        "joblib",
-        "matplotlib",
-        "morph_tool",
-        "neurom>=3.2",
-        "NeuroTS>=3.1.1",
-        "numpy>=1.23",
-        "pandas>=1.4",
-        "pyquaternion",
-        "region_grower>=0.4.0",
-        "scipy>=1.8",
-        "tqdm>=4.6",
-        "voxcell>=3.1.2",
-        "docutils<0.19",  # related to https://github.com/CrossNox/m2r2/issues/52
-    ],
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packages(include=["neurocollage"]),
     python_requires=">=3.8",
+    version=VERSION,
+    install_requires=reqs,
     extras_require={
-        "docs": ["m2r2", "sphinx", "sphinx-bluebrain-theme", "sphinx-click"],
-        "test": [
-            "mock",
-            "pytest",
-            "pytest-click",
-            "pytest-cov",
-            "pytest-html",
-        ],
+        "docs": doc_reqs,
+        "test": test_reqs,
     },
     entry_points={
         "console_scripts": ["neuro-collage=neurocollage.cli:main"],
@@ -70,4 +81,5 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
+    include_package_data=True,
 )

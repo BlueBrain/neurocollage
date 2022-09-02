@@ -14,7 +14,7 @@ spec.loader.exec_module(module)
 VERSION = module.VERSION
 
 reqs = [
-    "atlas_analysis>=0.0.3",
+    "atlas_analysis>=0.0.4",
     "brainbuilder",
     "click>=8.1.3",
     "joblib",
@@ -29,7 +29,6 @@ reqs = [
     "scipy>=1.8",
     "tqdm>=4.6",
     "voxcell>=3.1.2",
-    "docutils<0.19",  # related to https://github.com/CrossNox/m2r2/issues/52
 ]
 
 doc_reqs = [

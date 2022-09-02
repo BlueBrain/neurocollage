@@ -7,8 +7,6 @@ from atlas_analysis.planes.planes import _smoothing
 from atlas_analysis.planes.planes import create_centerline
 from atlas_analysis.planes.planes import create_planes as _create_planes
 from region_grower.atlas_helper import AtlasHelper
-from tqdm import tqdm
-from voxcell import CellCollection
 from voxcell.exceptions import VoxcellError
 from voxcell.nexus.voxelbrain import Atlas
 
@@ -79,47 +77,6 @@ def get_cells_between_planes(cells, plane_left, plane_right):
     return cells.loc[selected]
 
 
-def circuit_slicer(cells, n_cells, mtypes=None, planes=None, hemisphere=None):
-    """Selects n_cells mtype in mtypes."""
-    if mtypes is not None:
-        cells = slice_per_mtype(cells, mtypes)
-
-    # TODO: rough way to split hemisphere, maybe there is a better way, to investigate if needed
-    if hemisphere is not None:
-        if hemisphere == "left":
-            cells = cells[cells.z < cells.z.mean()]
-        if hemisphere == "right":
-            cells = cells[cells.z >= cells.z.mean()]
-
-    if planes is not None:
-        # between each pair of planes, select n_cells
-        return pd.concat(
-            [
-                slice_n_cells(get_cells_between_planes(cells, plane_left, plane_right), n_cells)
-                for plane_left, plane_right in tqdm(
-                    zip(planes[:-1:3], planes[2::3]), total=int(len(planes) / 3)
-                )
-            ]
-        )
-    return slice_n_cells(cells, n_cells)
-
-
-def slice_circuit(input_mvd3, output_mvd3, slicer):
-    """Slices an mvd3 file using a slicing function.
-
-    Args:
-        input_mvd3 (str): path to input mvd3 file
-        output_mvd3 (str): path to ouput_mvd3 file
-        slicer (function): function to slice the cells dataframe
-    """
-    cells = CellCollection.load_mvd3(input_mvd3)
-    sliced_cells = slicer(cells.as_dataframe())
-    sliced_cells.reset_index(inplace=True, drop=True)
-    sliced_cells.index += 1  # this is to match CellCollection index from 1
-    CellCollection.from_dataframe(sliced_cells).save_mvd3(output_mvd3)
-    return sliced_cells
-
-
 def _get_principal_direction(points):
     """Return the principal direction of a point cloud.
 
@@ -165,7 +122,7 @@ def create_planes(
     centerline_first_bound=None,
     centerline_last_bound=None,
     centerline_axis=0,
-):
+):  # pylint:disable=too-many-branches
     """Create planes in an atlas.
 
     We create 3 * plane_count such each triplet of planes define the left, center
@@ -227,29 +184,23 @@ def create_planes(
     else:
         raise Exception(f"Please set plane_type to 'aligned' or 'centerline', not {plane_type}.")
 
-    # create all planes to match slice_thickness between every two planes
-    centerline_len = np.linalg.norm(np.diff(centerline, axis=0), axis=1).sum()
-    total_plane_count = int(centerline_len / slice_thickness) * 2 + 1
-    planes = _create_planes(centerline, plane_count=total_plane_count)
-
-    # select plane_count planes + direct left/right neighbors
-    planes_all_ids = np.arange(total_plane_count)
-    id_shift = int(total_plane_count / plane_count)
-    planes_select_ids = list(planes_all_ids[int(id_shift / 2) :: id_shift])
-    planes_select_ids += list(planes_all_ids[int(id_shift / 2) - 1 :: id_shift])
-    planes_select_ids += list(planes_all_ids[int(id_shift / 2) + 1 :: id_shift])
-
     # check centerline is in the atlas region
-    # TODO: propose better fix
-    _planes_select_ids = []
-    for plane_id in planes_select_ids:
+    for point in centerline:
         try:
-            layer_annotation["annotation"].lookup(planes[plane_id].point)
-            _planes_select_ids.append(plane_id)
-        except VoxcellError:
-            L.warning("%s is out of bounds, we discard it.", plane_id)
+            layer_annotation["annotation"].lookup(point)
+        except VoxcellError as exc:
+            raise Exception("Centerline goes out of atlas region, we better stop here.") from exc
 
-    return [planes[i] for i in sorted(_planes_select_ids)], centerline
+    # create all planes to match slice_thickness between every two planes
+    shift = slice_thickness / np.linalg.norm(np.diff(centerline, axis=0), axis=1).sum()
+    left_planes = _create_planes(centerline, steps=np.linspace(0, 1 - 2 * shift, plane_count))
+    center_planes = _create_planes(centerline, steps=np.linspace(shift, 1 - shift, plane_count))
+    right_planes = _create_planes(centerline, steps=np.linspace(2 * shift, 1.0, plane_count))
+
+    planes = []
+    for l_plane, c_plane, r_plane in zip(left_planes, center_planes, right_planes):
+        planes.append({"left": l_plane, "center": c_plane, "right": r_plane})
+    return planes, centerline
 
 
 def get_atlas(atlas_path):

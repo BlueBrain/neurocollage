@@ -236,16 +236,35 @@ def _plot_collage(
     random,
 ):
     """Internal plot collage for multiprocessing."""
-    left_plane, right_plane = planes
-    plane_point = left_plane.point
+    plane_point = planes["center"].point
     atlas = get_atlas(atlas_path)
+
     rotation_matrix = get_plane_rotation_matrix(
-        left_plane, atlas.orientations.lookup(plane_point)[0]
+        planes["center"], atlas.orientations.lookup(plane_point)[0]
     )
 
     X, Y, layers = get_annotation_info(
         layer_annotation["annotation"], plane_point, rotation_matrix, n_pixels
     )
+
+    plane_point_left = planes["left"].point
+    rotation_matrix_left = get_plane_rotation_matrix(
+        planes["left"], atlas.orientations.lookup(plane_point_left)[0]
+    )
+
+    X_left, Y_left, layers_left = get_annotation_info(
+        layer_annotation["annotation"], plane_point_left, rotation_matrix_left, n_pixels
+    )
+
+    plane_point_right = planes["right"].point
+    rotation_matrix_right = get_plane_rotation_matrix(
+        planes["right"], atlas.orientations.lookup(plane_point_right)[0]
+    )
+
+    X_right, Y_right, layers_right = get_annotation_info(
+        layer_annotation["annotation"], plane_point_right, rotation_matrix_right, n_pixels
+    )
+
     layer_ids = np.array([-1] + list(layer_annotation["mapping"].keys())) + 1
 
     cmap = matplotlib.colors.ListedColormap(
@@ -254,6 +273,8 @@ def _plot_collage(
 
     fig = plt.figure(figsize=figsize)
     plt.pcolormesh(X, Y, layers, shading="nearest", cmap=cmap, alpha=0.2)
+    plt.contour(X_left, Y_left, layers_left, cmap=cmap, linestyles="dashed", linewidths=0.5)
+    plt.contour(X_right, Y_right, layers_right, cmap=cmap, linestyles="dotted", linewidths=0.5)
     bounds = list(layer_ids - 0.5) + [layer_ids[-1] + 0.5]
     norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
     cbar = plt.colorbar(
@@ -269,8 +290,8 @@ def _plot_collage(
         plot_cells(
             plt.gca(),
             cells_df,
-            left_plane,
-            right_plane,
+            planes["left"],
+            planes["right"],
             rotation_matrix=rotation_matrix,
             mtype=mtype,
             sample=sample,
@@ -283,7 +304,7 @@ def _plot_collage(
         X_y, Y_y, orientation_u, orientation_v = get_y_info(
             layer_annotation["annotation"],
             atlas,
-            left_plane.point,
+            plane_point,
             rotation_matrix,
             n_pixels_y,
         )
@@ -302,7 +323,7 @@ def _plot_collage(
     ax = plt.gca()
     ax.set_aspect("equal")
     ax.set_rasterized(True)
-    ax.set_title(f"plane coord: {left_plane.point}")
+    ax.set_title(f"plane coord: {plane_point}")
     plt.tight_layout()
     return fig
 
@@ -369,8 +390,6 @@ def plot_collage(
             figsize=figsize,
             random=random,
         )
-        for fig in Parallel(nb_jobs, verbose=joblib_verbose)(
-            delayed(f)(planes) for planes in zip(planes[:-1:3], planes[2::3])
-        ):
+        for fig in Parallel(nb_jobs, verbose=joblib_verbose)(delayed(f)(plane) for plane in planes):
             pdf.savefig(fig, bbox_inches="tight", dpi=dpi)
             plt.close(fig)

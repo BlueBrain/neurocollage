@@ -16,7 +16,7 @@ def main():
 
     layer_annotation = neurocollage.get_layer_annotation(atlas_path, region=region)
     planes, centerline = neurocollage.create_planes(
-        layer_annotation, plane_type="centerline_straight", slice_thickness=20, plane_count=5
+        layer_annotation, plane_type="centerline_straight", slice_thickness=200, plane_count=5
     )
 
     neurocollage.plot_collage(

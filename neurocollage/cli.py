@@ -136,11 +136,14 @@ def _select_args(func, kwargs, mapping=None):
     help="Path to the circuit config file.",
 )
 @click.option("--circuit-region", required=False, help="The region to consider in the circuit.")
+@click.option(
+    "--circuit-hemisphere", required=False, help="The hemisphere to consider in the circuit."
+)
 @click.option("--cells-mtype", help="The mtype to consider.")
 @click.option(
     "--cells-sample",
     type=click.IntRange(min=0, min_open=True),
-    help="The number of cells that are randomly selected to be ploted.",
+    help="The number of cells that are randomly selected to be plotted.",
 )
 @click.option("--cells-ext", help="The extension of morphology files.")
 @click.option(
@@ -218,6 +221,7 @@ def main(**kwargs):
     }
     circuit_path = kwargs.pop("circuit_path")
     region = kwargs.pop("circuit_region")
+    hemisphere = kwargs.pop("circuit_hemisphere")
 
     # Select args for each function
     cells_kwargs = _select_args(
@@ -262,7 +266,9 @@ def main(**kwargs):
     )
 
     # Load annotations
-    layer_annotation = neurocollage.get_layer_annotation(atlas_path, region=region)
+    layer_annotation = neurocollage.get_layer_annotation(
+        atlas_path, region=region, hemisphere=hemisphere
+    )
 
     # Create planes
     planes, _ = neurocollage.create_planes(layer_annotation, **plane_kwargs)

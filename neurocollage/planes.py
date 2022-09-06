@@ -210,7 +210,7 @@ def get_atlas(atlas_path):
     )
 
 
-def get_layer_annotation(atlas_path, region=None):
+def get_layer_annotation(atlas_path, region=None, hemisphere=None):
     """Create a VoxelData with layer annotation."""
     atlas_helper = get_atlas(atlas_path)
 
@@ -231,5 +231,9 @@ def get_layer_annotation(atlas_path, region=None):
         layers_data[mask] = layer_id + 1
         if not len(layers_data[mask]):
             L.warning("No voxel found for layer %s.", layer)
+
+    if hemisphere is not None:
+        layers_data = halve_atlas(layers_data, side=hemisphere)
+
     brain_regions.raw = layers_data
     return {"annotation": brain_regions, "mapping": layer_mapping}

@@ -143,7 +143,7 @@ def get_greedy_perm(X, sample):
     return idx_perm
 
 
-# pylint: disable=too-many-locals
+# pylint: disable=too-many-locals,too-many-branches
 def plot_cells(
     ax,
     cells_df,
@@ -168,11 +168,14 @@ def plot_cells(
     cells_df = get_cells_between_planes(cells_df, plane_left, plane_right)
     gids = []
     if len(cells_df.index) > 0:
-        _sample = min(sample, len(cells_df.index))
-        if random:
-            cells_df = cells_df.sample(n=_sample, random_state=42)
+        if sample is not None:
+            sample = min(sample, len(cells_df.index))
         else:
-            ids = get_greedy_perm(cells_df[["x", "y", "z"]].to_numpy(), _sample)
+            sample = len(cells_df.index)
+        if random:
+            cells_df = cells_df.sample(n=sample, random_state=42)
+        else:
+            ids = get_greedy_perm(cells_df[["x", "y", "z"]].to_numpy(), sample)
             cells_df = cells_df.iloc[ids]
         gids = cells_df.index
 

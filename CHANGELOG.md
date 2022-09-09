@@ -1,5 +1,13 @@
 # Changelog
 
+## [neurocollage-v0.2.0](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.4...neurocollage-v0.2.0)
+
+> 9 September 2022
+
+### Uncategorized Changes
+
+- Adding 3d collage and related functions (Alexis Arnaudon - [e98d7c5](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/e98d7c5189b2b81f3f2b5737e6331e0b7120dba9))
+
 ## [neurocollage-v0.1.4](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.3...neurocollage-v0.1.4)
 
 > 6 September 2022

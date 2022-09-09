@@ -29,6 +29,8 @@ reqs = [
     "scipy>=1.8",
     "tqdm>=4.6",
     "voxcell>=3.1.2",
+    "pyglet",
+    "trimesh",
 ]
 
 doc_reqs = [

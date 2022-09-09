@@ -7,19 +7,21 @@ import matplotlib
 import matplotlib.pyplot as plt
 import neurom
 import numpy as np
+import trimesh
 from joblib import Parallel
 from joblib import delayed
 from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.resampling import resample_linear_density
-from neurom import load_morphology
 from neurom.view import matplotlib_impl
 from pyquaternion import Quaternion
 from scipy.optimize import fmin
 from sklearn.metrics.pairwise import pairwise_distances
 from voxcell.exceptions import VoxcellError
 
+from neurocollage.mesh_helper import MeshHelper
 from neurocollage.planes import get_atlas
 from neurocollage.planes import get_cells_between_planes
+from neurocollage.utils import load_insitu_morphology
 
 L = logging.getLogger(__name__)
 matplotlib.use("Agg")
@@ -184,23 +186,7 @@ def plot_cells(
             ax.plot(*sec.points.T[:2], c=matplotlib_impl.TREE_COLOR[sec.type], lw=lw)
 
     for gid in gids:
-
-        m = load_morphology(cells_df.loc[gid, "path"])
-        if "orientation" in cells_df.columns:
-
-            # pylint: disable=cell-var-from-loop
-            def _trans(p):
-                return p.dot(cells_df.loc[gid, "orientation"].T)
-
-            m = m.transform(_trans)
-        else:
-            L.warning("No orientation field found")
-
-        # pylint: disable=cell-var-from-loop
-        def trans(p):
-            return p + cells_df.loc[gid, ["x", "y", "z"]].to_numpy().T
-
-        m = m.transform(trans)
+        m = load_insitu_morphology(cells_df, gid)
 
         if linear_density is not None:
             m = resample_linear_density(m, linear_density)
@@ -221,7 +207,7 @@ def plot_cells(
 
 
 # pylint: disable=too-many-arguments,too-many-locals
-def _plot_collage(
+def _plot_2d_collage(
     planes,
     layer_annotation,
     cells_df,
@@ -332,7 +318,7 @@ def _plot_collage(
 
 
 # pylint: disable=too-many-arguments
-def plot_collage(
+def plot_2d_collage(
     cells_df,
     planes,
     layer_annotation,
@@ -377,7 +363,7 @@ def plot_collage(
     Path(pdf_filename).parent.mkdir(parents=True, exist_ok=True)
     with PdfPages(pdf_filename) as pdf:
         f = partial(
-            _plot_collage,
+            _plot_2d_collage,
             layer_annotation=layer_annotation,
             cells_df=cells_df,
             mtype=mtype,
@@ -396,3 +382,24 @@ def plot_collage(
         for fig in Parallel(nb_jobs, verbose=joblib_verbose)(delayed(f)(plane) for plane in planes):
             pdf.savefig(fig, bbox_inches="tight", dpi=dpi)
             plt.close(fig)
+
+
+def plot_3d_collage(
+    cells_df, planes, layer_annotation, atlas_path, mtype, region, hemisphere, centerline, sample
+):
+    """Plot 3d collage with trimesh."""
+
+    mesh_helper = MeshHelper(atlas_path, region, hemisphere)
+    mesh_helper.layer_annotation = layer_annotation
+
+    centerline_data = [trimesh.points.PointCloud(mesh_helper.positions_to_indices(centerline))]
+    plane_data = [mesh_helper.load_planes(planes)]
+    mesh_helper.render(data=plane_data + centerline_data)
+
+    cells_df = cells_df[cells_df.mtype == mtype]
+    for plane in planes:
+        _cells_df = get_cells_between_planes(cells_df, plane["left"], plane["right"])
+        _cells_df = _cells_df.sample(min(sample, len(_cells_df.index)))
+        cell_data = mesh_helper.load_morphs(_cells_df)
+        mesh_helper.render(data=cell_data, plane=plane)
+    mesh_helper.show()

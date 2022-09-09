@@ -206,6 +206,7 @@ def _select_args(func, kwargs, mapping=None):
     type=click.FloatRange(min=0),
     help="The verbosity of the parallel library.",
 )
+@click.option("--3d", "is_3d", is_flag=True)
 def main(**kwargs):
     """Load data from an atlas and a circuit and create a collage figure."""
     # Handle args
@@ -240,7 +241,7 @@ def main(**kwargs):
         },
     )
     collage_kwargs = _select_args(
-        neurocollage.plot_collage,
+        neurocollage.plot_2d_collage,
         kwargs,
         {
             "collage_pdf_filename": "pdf_filename",
@@ -271,9 +272,21 @@ def main(**kwargs):
     )
 
     # Create planes
-    planes, _ = neurocollage.create_planes(layer_annotation, **plane_kwargs)
-
-    # Plot and export the figure
-    neurocollage.plot_collage(
-        cells_df, planes, layer_annotation, atlas_path, mtype=mtype, **collage_kwargs
-    )
+    planes, centerline = neurocollage.create_planes(layer_annotation, **plane_kwargs)
+    if kwargs["is_3d"]:
+        neurocollage.plot_3d_collage(
+            cells_df,
+            planes,
+            layer_annotation,
+            atlas_path,
+            mtype,
+            region,
+            hemisphere,
+            centerline,
+            collage_kwargs["sample"],
+        )
+    else:
+        # Plot and export the figure
+        neurocollage.plot_2d_collage(
+            cells_df, planes, layer_annotation, atlas_path, mtype=mtype, **collage_kwargs
+        )

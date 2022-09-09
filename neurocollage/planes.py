@@ -133,7 +133,7 @@ def create_planes(
         plane_type (str): type of planes creation algorithm, two choices:
 
             * centerline_straight: centerline is straight between _first_bound and _last_bound
-            * centerline_curved: ceneterline is curved with algorithm from atlas-analysis package
+            * centerline_curved: centerline is curved with algorithm from atlas-analysis package
             * aligned: centerline is a straight line, along the centerline_axis
 
         plane_count (int): number of planes to create slices of atlas,

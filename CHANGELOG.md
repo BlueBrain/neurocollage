@@ -1,5 +1,13 @@
 # Changelog
 
+## [neurocollage-v0.2.1](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.2.0...neurocollage-v0.2.1)
+
+> 9 November 2022
+
+### Chores And Housekeeping
+
+- Fix Pandas warnings (Adrien Berchet - [20aa67b](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/20aa67b2cd18ee218c5963791fb37fa54689016c))
+
 ## [neurocollage-v0.2.0](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.4...neurocollage-v0.2.0)
 
 > 9 September 2022

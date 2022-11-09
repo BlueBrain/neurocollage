@@ -58,13 +58,17 @@ def slice_n_cells(cells, n_cells, random_state=0):
     """Selects n_cells random cells per mtypes."""
     if n_cells <= 0:
         return cells
-    sampled_cells = pd.DataFrame()
+
+    sampled_cells = []
     for mtype in cells.mtype.unique():
         samples = cells[cells.mtype == mtype].sample(
             n=min(n_cells, len(cells[cells.mtype == mtype])), random_state=random_state
         )
-        sampled_cells = sampled_cells.append(samples)
-    return sampled_cells
+        sampled_cells.append(samples)
+
+    if len(sampled_cells) > 0:
+        return pd.concat(sampled_cells)
+    return pd.DataFrame()
 
 
 def get_cells_between_planes(cells, plane_left, plane_right):

@@ -3,5 +3,5 @@ Command Line Interface
 
 
 .. click:: neurocollage.cli:main
-  :prog: neuro-collage
+  :prog: neurocollage
   :nested: full

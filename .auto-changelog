@@ -4,7 +4,7 @@
     "tagPrefix": "neurocollage-v",
     "commitLimit": false,
     "backfillLimit": false,
-    "ignoreCommitPattern": "Release [0-9]+\\.[0-9]+\\.[0-9]+|Update CHANGELOG.*|.*\\[skip-changelog\\].*|\\[pre-commit.ci\\]",
+    "ignoreCommitPattern": "Release:? [0-9]+\\.[0-9]+\\.[0-9]+|Update CHANGELOG.*|.*\\[skip-changelog\\].*|\\[pre-commit.ci\\]",
     "commitUrl": "https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/{id}",
     "issueUrl": "https://bbpgitlab.epfl.ch/neuromath/neurocollage/issues/{id}",
     "mergeUrl": "https://bbpgitlab.epfl.ch/neuromath/neurocollage/merge_requests/{id}",

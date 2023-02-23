@@ -5,6 +5,8 @@ import bluepy
 import bluepysnap
 import pandas as pd
 
+from neurocollage.exceptions import NeurocollageException
+
 # pylint: disable=protected-access
 
 
@@ -37,7 +39,7 @@ def get_cell_df_from_circuit_legacy(circuit, ext=None, group=None):
                 + f".{ext}"
             )
             return df
-    raise Exception(f"We cannot find morphologies in {p}, {dirnames}.")
+    raise NeurocollageException(f"We cannot find morphologies in {p}, {dirnames}.")
 
 
 def _get_cell_df_from_circuit_sonata(circuit_path, ext=None, group=None):

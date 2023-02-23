@@ -4,6 +4,7 @@ import neurocollage.loader
 
 
 def main():
+    """The function to plot the collage of the circuit."""
     circuit_path = "/gpfs/bbp.cscs.ch/project/proj112/circuits/CA1/20211110-BioM/CircuitConfig"
     region = "CA1"
     mtype = "SP_PC"

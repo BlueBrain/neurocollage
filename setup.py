@@ -2,7 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-from setuptools import find_packages
+from setuptools import find_namespace_packages
 from setuptools import setup
 
 spec = importlib.util.spec_from_file_location(
@@ -15,22 +15,23 @@ VERSION = module.VERSION
 
 reqs = [
     "atlas_analysis>=0.0.4",
-    "brainbuilder",
-    "click>=8.1.3",
-    "joblib",
-    "matplotlib",
-    "morph_tool",
+    "brainbuilder>=0.17",
+    "bluepysnap>=0.13.1,<1",
+    "click>=8",
+    "joblib>=0.14",
+    "matplotlib>=3.4",
+    "morph_tool>=2.9",
     "neurom>=3.2",
     "NeuroTS>=3.1.1",
     "numpy>=1.23",
     "pandas>=1.4",
-    "pyquaternion",
+    "pyglet>=2",
+    "pyquaternion>=0.9.5",
     "region_grower>=0.4.0",
     "scipy>=1.8",
-    "tqdm>=4.6",
+    "tqdm>=4.60",
+    "trimesh>=3.6",
     "voxcell>=3.1.2",
-    "pyglet",
-    "trimesh",
 ]
 
 doc_reqs = [
@@ -41,11 +42,12 @@ doc_reqs = [
 ]
 
 test_reqs = [
-    "mock",
-    "pytest",
-    "pytest-click",
-    "pytest-cov",
-    "pytest-html",
+    "mock>=3",
+    "coverage>=6.5,<7",
+    "pytest>=6",
+    "pytest-click>=1",
+    "pytest-cov>=3,<4",
+    "pytest-html>=2",
 ]
 
 setup(
@@ -61,7 +63,7 @@ setup(
         "Source": "https://bbpgitlab.epfl.ch/neuromath/neurocollage",
     },
     license="BBP-internal-confidential",
-    packages=find_packages(include=["neurocollage"]),
+    packages=find_namespace_packages(include=["neurocollage*"]),
     python_requires=">=3.8",
     version=VERSION,
     install_requires=reqs,
@@ -70,8 +72,11 @@ setup(
         "test": test_reqs,
     },
     entry_points={
-        "console_scripts": ["neuro-collage=neurocollage.cli:main"],
+        "console_scripts": [
+            "neurocollage=neurocollage.cli:main",
+        ],
     },
+    include_package_data=True,
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Education",
@@ -80,7 +85,8 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
-    include_package_data=True,
 )

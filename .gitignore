@@ -2,6 +2,7 @@
 .eggs
 .idea
 *.pyc
+*.sonata
 *.swp
 *py~
 *~

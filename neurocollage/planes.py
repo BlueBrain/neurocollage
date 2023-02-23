@@ -10,6 +10,8 @@ from region_grower.atlas_helper import AtlasHelper
 from voxcell.exceptions import VoxcellError
 from voxcell.nexus.voxelbrain import Atlas
 
+from neurocollage.exceptions import NeurocollageException
+
 L = logging.getLogger(__name__)
 LEFT = "left"
 RIGHT = "right"
@@ -186,14 +188,18 @@ def create_planes(
             bbox[0, centerline_axis], bbox[1, centerline_axis], 2
         )
     else:
-        raise Exception(f"Please set plane_type to 'aligned' or 'centerline', not {plane_type}.")
+        raise NeurocollageException(
+            f"Please set plane_type to 'aligned' or 'centerline', not {plane_type}."
+        )
 
     # check centerline is in the atlas region
     for point in centerline:
         try:
             layer_annotation["annotation"].lookup(point)
         except VoxcellError as exc:
-            raise Exception("Centerline goes out of atlas region, we better stop here.") from exc
+            raise NeurocollageException(
+                "Centerline goes out of atlas region, we better stop here."
+            ) from exc
 
     # create all planes to match slice_thickness between every two planes
     shift = slice_thickness / np.linalg.norm(np.diff(centerline, axis=0), axis=1).sum()

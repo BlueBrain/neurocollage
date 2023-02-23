@@ -4,6 +4,7 @@ import neurocollage.loader
 
 
 def main():
+    """The function to plot the collage of the circuit."""
     circuit_path = (
         "/gpfs/bbp.cscs.ch/project/proj83/jira-tickets/NSETM-1948-extract-hex-O1/data/S1_data/"
         "circuit_config.json"

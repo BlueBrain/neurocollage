@@ -118,8 +118,7 @@ def get_y_info(annotation, atlas, plane_origin, rotation_matrix, n_pixels=64):
 
 
 def _dpoint2pointcloud(X, i):
-    """Return the distance from the ith point in a Euclidean point cloud
-    to the rest of the points
+    """Return the distance from the ith point in a Euclidean point cloud to the rest of the points.
 
     Adapted from ripser.py.
     """
@@ -342,9 +341,10 @@ def plot_2d_collage(
     """Plot collage of an mtype and a list of planes.
 
     Args:
-        cells (cells): should contain location of soma and mtypes
+        cells_df (cells): should contain location of soma and mtypes
         planes (list): list of plane objects from atlas_analysis
         layer_annotation (VoxelData): layer annotation on atlas
+        atlas_path (str): the path to the atlas
         mtype (str): mtype of cells to plot
         pdf_filename (str): pdf filename
         sample (int): maximum number of cells to plot
@@ -358,6 +358,7 @@ def plot_2d_collage(
         with_cells (bool): plot cells or not
         cells_linear_density (float): apply resampling to plot less points
         cells_wire_plot (bool): if true, do not use neurom.view, but plt.plot
+        figsize (tuple(int, int)): the size of the figure
         random (bool): randomly select cells if True, or select furthest away cells
     """
     Path(pdf_filename).parent.mkdir(parents=True, exist_ok=True)
@@ -388,7 +389,6 @@ def plot_3d_collage(
     cells_df, planes, layer_annotation, atlas_path, mtype, region, hemisphere, centerline, sample
 ):
     """Plot 3d collage with trimesh."""
-
     mesh_helper = MeshHelper(atlas_path, region, hemisphere)
     mesh_helper.layer_annotation = layer_annotation
 

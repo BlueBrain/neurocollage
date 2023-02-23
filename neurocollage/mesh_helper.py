@@ -216,6 +216,9 @@ class MeshHelper(AtlasHelper):
         Args:
             data: pass any data which can be rendered
             plane: give a plane to slice the rendering
+            filename (str): if given, the figure is exported to this file path
+            show (bool): if set to `True` the figure is shown at execution time
+            line_width (float): the line width used for rendering
         """
         meshes = self.get_meshes(plane=plane)
 

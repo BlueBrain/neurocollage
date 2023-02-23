@@ -17,8 +17,8 @@ def load_insitu_morphology(df, gid):
                 import ast
                 import re
 
-                s = re.sub("\[ +", "[", s.strip())
-                s = re.sub("[,\s]+", ", ", s)
+                s = re.sub(r"\[ +", "[", s.strip())
+                s = re.sub(r"[,\s]+", ", ", s)
                 return np.array(ast.literal_eval(s))
 
             orientation = str2array(orientation)

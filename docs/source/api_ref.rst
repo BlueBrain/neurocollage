@@ -9,3 +9,6 @@ This page presents the complete API documentation.
     neurocollage.collage
     neurocollage.planes
     neurocollage.loader
+    neurocollage.mesh_helper
+    neurocollage.utils
+    neurocollage.exceptions

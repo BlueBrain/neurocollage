@@ -1,4 +1,4 @@
-"""Click app."""
+"""Command Line Interface for the neurocollage package."""
 import inspect
 import json
 import logging

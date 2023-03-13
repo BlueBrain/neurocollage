@@ -4,6 +4,7 @@ import json
 import logging
 import os
 from configparser import ConfigParser
+from pathlib import Path
 
 import click
 
@@ -55,6 +56,22 @@ class DictParam(click.ParamType):
                 value = json.loads(value)
         except json.JSONDecodeError:
             self.fail(f"{value!r} is not a valid JSON object", param, ctx)
+
+        return value
+
+
+class ListParam(click.ParamType):
+    """A `click` parameter to process parameters given as JSON arrays."""
+
+    name = "list"
+
+    def convert(self, value, param, ctx):
+        """Convert a given value."""
+        try:
+            if not isinstance(value, list):
+                value = json.loads(value)
+        except json.JSONDecodeError:
+            self.fail(f"{value!r} is not a valid JSON array", param, ctx)
 
         return value
 
@@ -139,7 +156,11 @@ def _select_args(func, kwargs, mapping=None):
 @click.option(
     "--circuit-hemisphere", required=False, help="The hemisphere to consider in the circuit."
 )
-@click.option("--cells-mtype", help="The mtype to consider.")
+@click.option(
+    "--cells-mtypes",
+    help="The mtypes to consider in a list.",
+    type=ListParam(),
+)
 @click.option(
     "--cells-sample",
     type=click.IntRange(min=0, min_open=True),
@@ -210,11 +231,7 @@ def _select_args(func, kwargs, mapping=None):
 def main(**kwargs):
     """Load data from an atlas and a circuit and create a collage figure."""
     # Handle args
-    mtype = kwargs.pop("cells_mtype", None)
-    if mtype:
-        group = {"mtype": mtype}
-    else:
-        group = None
+    mtypes = kwargs.pop("cells_mtypes", None)
 
     atlas_path = {
         "atlas": kwargs.pop("atlas_path"),
@@ -261,32 +278,44 @@ def main(**kwargs):
         },
     )
 
-    # Load cells
-    cells_df = neurocollage.loader.get_cell_df_from_circuit(
-        circuit_path, group=group, **cells_kwargs
-    )
+    for mtype in mtypes:
+        L.info("Make collage for mtype: %s", mtype)
+        if mtype:
+            group = {"mtype": mtype}
+        else:
+            group = None
 
-    # Load annotations
-    layer_annotation = neurocollage.get_layer_annotation(
-        atlas_path, region=region, hemisphere=hemisphere
-    )
+        if len(mtypes) > 1:
+            name = Path(Path(kwargs["collage_pdf_filename"]).stem)
+            name.mkdir(exist_ok=True)
+            collage_kwargs["pdf_filename"] = name / f"{name}_{mtype}.pdf"
 
-    # Create planes
-    planes, centerline = neurocollage.create_planes(layer_annotation, **plane_kwargs)
-    if kwargs["is_3d"]:
-        neurocollage.plot_3d_collage(
-            cells_df,
-            planes,
-            layer_annotation,
-            atlas_path,
-            mtype,
-            region,
-            hemisphere,
-            centerline,
-            collage_kwargs["sample"],
+        # Load cells
+        cells_df = neurocollage.loader.get_cell_df_from_circuit(
+            circuit_path, group=group, **cells_kwargs
         )
-    else:
-        # Plot and export the figure
-        neurocollage.plot_2d_collage(
-            cells_df, planes, layer_annotation, atlas_path, mtype=mtype, **collage_kwargs
+
+        # Load annotations
+        layer_annotation = neurocollage.get_layer_annotation(
+            atlas_path, region=region, hemisphere=hemisphere
         )
+
+        # Create planes
+        planes, centerline = neurocollage.create_planes(layer_annotation, **plane_kwargs)
+        if kwargs["is_3d"]:
+            neurocollage.plot_3d_collage(
+                cells_df,
+                planes,
+                layer_annotation,
+                atlas_path,
+                mtype,
+                region,
+                hemisphere,
+                centerline,
+                collage_kwargs["sample"],
+            )
+        else:
+            # Plot and export the figure
+            neurocollage.plot_2d_collage(
+                cells_df, planes, layer_annotation, atlas_path, mtype=mtype, **collage_kwargs
+            )

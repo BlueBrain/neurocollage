@@ -69,8 +69,18 @@ class MeshHelper(AtlasHelper):
     def get_pia_mesh(self, cutoff=3):
         """Get pia mesh."""
         data = self.depths.raw
+
+        # ensures there is 0 in outer voxels for boundary detection
+        data[:, :, 0] = 0
+        data[:, :, -1] = 0
+        data[:, 0, :] = 0
+        data[:, -1, :] = 0
+        data[0, :, :] = 0
+        data[-1, :, :] = 0
+
         data[data > cutoff * np.mean(abs(self.depths.voxel_dimensions))] = 0
         data[np.isnan(data)] = 0
+
         mesh = self._get_mesh(VoxelGrid(data), self.boundary_mask)
         mesh.visual.face_colors = [0, 0, 255, 100]
         return mesh
@@ -132,8 +142,12 @@ class MeshHelper(AtlasHelper):
         return meshes
 
     def positions_to_indices(self, points):
-        """Simpler position_to_indices."""
+        """Simpler positions_to_indices."""
         return self.brain_regions.positions_to_indices(points, keep_fraction=True, strict=False)
+
+    def indices_to_positions(self, indices):
+        """Simpler indices_to_positions."""
+        return self.brain_regions.indices_to_positions(indices)
 
     def directions_to_indices(self, direction):
         """Convert directions to indices based coordinates.

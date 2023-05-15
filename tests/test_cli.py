@@ -20,5 +20,4 @@ def test_cli(cli_runner, data_path, tmpdir, small_O1_path, cell_collection):
             tmpdir / "collage.pdf",
         ],
     )
-    print(result.output)
     assert result.exit_code == 0

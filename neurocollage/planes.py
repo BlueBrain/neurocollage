@@ -226,21 +226,25 @@ def get_atlas(atlas_path):
     )
 
 
-def get_layer_annotation(atlas_path, region=None, hemisphere=None):
+def get_layer_annotation(atlas_path, region, hemisphere=None):
     """Create a VoxelData with layer annotation."""
     atlas_helper = get_atlas(atlas_path)
 
     brain_regions = atlas_helper.brain_regions
     layers_data = np.zeros_like(brain_regions.raw, dtype="uint8")
 
-    region_mask = None
-    if region is not None:
+    try:
         region_mask = atlas_helper.atlas.get_region_mask(region).raw
+    except AttributeError:
+        L.warning("%s does not exists in the atlas, so we do not filter", region)
+        region_mask = None
 
     layer_mapping = {}
-    for layer_id, layer in enumerate(atlas_helper.layers):
-        layer_mapping[layer_id] = atlas_helper.region_structure["names"].get(layer, str(layer))
-        region_query = atlas_helper.region_structure["region_queries"].get(layer, None)
+    for layer_id, layer in enumerate(atlas_helper.layers[region]):
+        layer_mapping[layer_id] = atlas_helper.region_structure[region]["names"].get(
+            layer, str(layer)
+        )
+        region_query = atlas_helper.region_structure[region]["region_queries"][layer]
         mask = atlas_helper.atlas.get_region_mask(region_query).raw
         if region_mask is not None:
             mask *= region_mask

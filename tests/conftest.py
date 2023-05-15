@@ -79,7 +79,7 @@ def cell_collection(cells_df):
 @pytest.fixture(scope="function")
 def layer_annotation(small_O1_path):
     """Layer annotation path."""
-    return get_layer_annotation(small_O1_path)
+    return get_layer_annotation(small_O1_path, "O0")
 
 
 @pytest.fixture(scope="function")

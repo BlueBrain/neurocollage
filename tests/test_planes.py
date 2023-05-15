@@ -12,7 +12,7 @@ DATA = Path(__file__).parent / "data"
 
 def test_layer_annotation(small_O1_path):
     """Test layer_annotation."""
-    layer_annotation = tested.get_layer_annotation(small_O1_path)
+    layer_annotation = tested.get_layer_annotation(small_O1_path, "O0")
 
     assert layer_annotation["mapping"] == {
         0: "layer 1",

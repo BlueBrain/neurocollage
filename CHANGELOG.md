@@ -1,5 +1,23 @@
 # Changelog
 
+## [neurocollage-v0.3.0](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.2.1...neurocollage-v0.3.0)
+
+> 15 May 2023
+
+### New Features
+
+- Use multi region (Alexis Arnaudon - [5b4f6fb](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/5b4f6fbff2834ba8199946339231ce6629a2cc5a))
+- With O1 and more mesh helper (Alexis Arnaudon - [5021554](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/5021554eda806239b010d2e2f4d794cb82bc9004))
+
+### Chores And Housekeeping
+
+- Bump Copier template (Adrien Berchet - [b78f6bb](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/b78f6bb2c0fa80cab40f693e3560115a1a2d2360))
+
+### General Changes
+
+- Add list of mtypes in CLI (Alexis Arnaudon - [adda869](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/adda869a34710a2f2407ba7dd8da968da002866a))
+- Fix for 1 plane case (Alexis Arnaudon - [5d7826c](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/5d7826c502d94343153c89a72ccd8be7c01fb254))
+
 ## [neurocollage-v0.2.1](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.2.0...neurocollage-v0.2.1)
 
 > 9 November 2022
@@ -12,7 +30,7 @@
 
 > 9 September 2022
 
-### Uncategorized Changes
+### General Changes
 
 - Adding 3d collage and related functions (Alexis Arnaudon - [e98d7c5](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/e98d7c5189b2b81f3f2b5737e6331e0b7120dba9))
 
@@ -36,7 +54,7 @@
 
 - Export test and coverage reports (Adrien Berchet - [b2da076](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/b2da0762d5b45c24cdb46623f0df2a1810c08503))
 
-### Uncategorized Changes
+### General Changes
 
 - Add plot of left/right planes (Alexis Arnaudon - [d897bba](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/d897bba5970eaaf5194a13e383998656d558a8f1))
 - Improvements (Alexis Arnaudon - [5c4342c](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/5c4342ccc544768009a3c64e92e86a9c386db988))
@@ -54,7 +72,7 @@
 
 > 9 August 2022
 
-### Uncategorized Changes
+### General Changes
 
 - Improve doc (Adrien Berchet - [1f62c93](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/1f62c9304a68ad21769e161d3cc1054f83bbce2f))
 
@@ -62,7 +80,7 @@
 
 > 8 August 2022
 
-### Uncategorized Changes
+### General Changes
 
 - Set package name to lower case (Adrien Berchet - [303bf40](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/303bf40a5fbd59545446b627c3a347bfb3745a32))
 
@@ -70,7 +88,7 @@
 
 > 8 August 2022
 
-### Uncategorized Changes
+### General Changes
 
 - Initial code (Alexis Arnaudon - [d417652](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/d417652e36c58cac7aa8171d1d77a6733dd09332))
 - Initial commit (Adrien Berchet - [b90d31d](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/b90d31d60661873dab4c2bd217bb42ab7cbd28bc))

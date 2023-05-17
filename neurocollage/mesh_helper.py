@@ -68,7 +68,7 @@ class MeshHelper(AtlasHelper):
 
     def get_pia_mesh(self, cutoff=3):
         """Get pia mesh."""
-        data = self.depths.raw
+        data = self.depths[self.region].raw
 
         # ensures there is 0 in outer voxels for boundary detection
         data[:, :, 0] = 0
@@ -78,7 +78,7 @@ class MeshHelper(AtlasHelper):
         data[0, :, :] = 0
         data[-1, :, :] = 0
 
-        data[data > cutoff * np.mean(abs(self.depths.voxel_dimensions))] = 0
+        data[data > cutoff * np.mean(abs(self.depths[self.region].voxel_dimensions))] = 0
         data[np.isnan(data)] = 0
 
         mesh = self._get_mesh(VoxelGrid(data), self.boundary_mask)

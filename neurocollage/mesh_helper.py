@@ -59,7 +59,7 @@ class MeshHelper(AtlasHelper):
 
     def get_total_boundary_mesh(self):
         """Get entire boundary mesh where depth is defined."""
-        data = self.depths.raw
+        data = self.depths[self.region].raw
         data[np.isnan(data)] = 0
         data[data > 0] = 1
         mesh = VoxelGrid(data).marching_cubes

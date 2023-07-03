@@ -6,8 +6,8 @@ from neurom import load_morphology
 def load_insitu_morphology(df, gid):
     """Load a morphology from dataframe with position and orientation."""
     m = load_morphology(df.loc[gid, "path"])
-    if "orientation" in df.columns:
 
+    if "orientation" in df.columns:
         orientation = df.loc[gid, "orientation"]
         if isinstance(orientation, str):
 

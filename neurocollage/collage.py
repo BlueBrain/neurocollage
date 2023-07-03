@@ -25,6 +25,7 @@ from neurocollage.utils import load_insitu_morphology
 
 L = logging.getLogger(__name__)
 matplotlib.use("Agg")
+PIA_DIRECTION = [0, 1, 0]
 
 
 def get_plane_rotation_matrix(plane, current_rotation, target=None):
@@ -44,16 +45,17 @@ def get_plane_rotation_matrix(plane, current_rotation, target=None):
         np.ndarray: rotation matrix to map VoxelData coordinates to plane coordinates
     """
     if target is None:
-        target = [0, 1, 0]
+        target = PIA_DIRECTION
     target /= np.linalg.norm(target)
 
     current_direction = current_rotation.dot(target)
 
+    # this rotates the z direction of the space into the normal to the plane
     rotation_matrix = plane.get_quaternion().rotation_matrix.T
 
     def _get_rot_matrix(angle):
         """Get rotation matrix for a given angle along [0, 0, 1]."""
-        return Quaternion(axis=[0, 0, 1], angle=angle).rotation_matrix
+        return Quaternion(axis=[0, 0, 1], angle=angle).rotation_matrix.T
 
     def _cost(angle):
         return 1 - (_get_rot_matrix(angle).dot(rotation_matrix).dot(current_direction)).dot(target)
@@ -63,19 +65,34 @@ def get_plane_rotation_matrix(plane, current_rotation, target=None):
 
 
 def _get_plane_grid(annotation, plane_origin, rotation_matrix, n_pixels):
+    """Get grid to parametrize the plane."""
     ids = np.vstack(np.where(annotation.raw > 0)).T
-    pts = annotation.indices_to_positions(ids)
-    pts = (pts - plane_origin).dot(rotation_matrix.T)
-    pts_dot_x = pts.dot([1.0, 0.0, 0.0])
-    pts_dot_y = pts.dot([0.0, 1.0, 0.0])
-    x_min = pts[np.argmin(pts_dot_x)][0]
-    x_max = pts[np.argmax(pts_dot_x)][0]
-    y_min = pts[np.argmin(pts_dot_y)][1]
-    y_max = pts[np.argmax(pts_dot_y)][1]
+    pts = annotation.indices_to_positions(ids)  # points where we have annotation
 
+    pts = (pts - plane_origin).dot(rotation_matrix.T)  # move to plane space
+
+    # get points in the plane only
+    pts = pts[
+        (pts[:, 2] > -annotation.voxel_dimensions[2]) & (pts[:, 2] < annotation.voxel_dimensions[2])
+    ]
+    if not len(pts):
+        pts = pts[
+            (pts[:, 2] > -2 * annotation.voxel_dimensions[2])
+            & (pts[:, 2] < 2 * annotation.voxel_dimensions[2])
+        ]
+
+    # get bbox of the points
+    x_min = pts[np.argmin(pts[:, 0]), 0]
+    x_max = pts[np.argmax(pts[:, 0]), 0]
+    y_min = pts[np.argmin(pts[:, 1]), 1]
+    y_max = pts[np.argmax(pts[:, 1]), 1]
+
+    # create the grid in plane coordinates
     xs_plane = np.linspace(x_min, x_max, n_pixels)
     ys_plane = np.linspace(y_min, y_max, n_pixels)
     X, Y = np.meshgrid(xs_plane, ys_plane)
+
+    # get the plane points in original coordinates
     points = np.array(
         [
             np.array([x, y, 0]).dot(rotation_matrix) + plane_origin
@@ -103,14 +120,16 @@ def get_annotation_info(annotation, plane_origin, rotation_matrix, n_pixels=1024
 def get_y_info(annotation, atlas, plane_origin, rotation_matrix, n_pixels=64):
     """Get direction of y axis on a grid on the atlas planes."""
     X, Y, points = _get_plane_grid(annotation, plane_origin, rotation_matrix, n_pixels)
+
     orientations = []
     for point in points:
         try:
             orientations.append(
-                rotation_matrix.dot(np.dot(atlas.orientations.lookup(point)[0], [0.0, 1.0, 0.0]))
+                rotation_matrix.dot(np.dot(atlas.orientations.lookup(point)[0], PIA_DIRECTION))
             )
         except VoxcellError:
-            orientations.append([0.0, 1.0, 0.0])
+            orientations.append(rotation_matrix.dot(PIA_DIRECTION))
+
     orientations = np.array(orientations)
     orientation_u = orientations[:, 0].reshape(n_pixels, n_pixels)
     orientation_v = orientations[:, 1].reshape(n_pixels, n_pixels)
@@ -148,8 +167,7 @@ def get_greedy_perm(X, sample):
 def plot_cells(
     ax,
     cells_df,
-    plane_left,
-    plane_right,
+    planes,
     rotation_matrix=None,
     mtype=None,
     sample=10,
@@ -166,7 +184,7 @@ def plot_cells(
     if plot_neuron_kwargs is not None:
         _plot_neuron_kwargs.update(plot_neuron_kwargs)
 
-    cells_df = get_cells_between_planes(cells_df, plane_left, plane_right)
+    cells_df = get_cells_between_planes(cells_df, planes["left"], planes["right"])
     gids = []
     if len(cells_df.index) > 0:
         if sample is not None:
@@ -189,10 +207,11 @@ def plot_cells(
 
         if linear_density is not None:
             m = resample_linear_density(m, linear_density)
+
         morphology = neurom.core.Morphology(m)
 
         def _to_plane_coord(p):
-            return np.dot(p - plane_left.point, rotation_matrix.T)
+            return np.dot(p - planes["center"].point, rotation_matrix.T)
 
         # transform morphology in the plane coordinates
         morphology = morphology.transform(_to_plane_coord)
@@ -224,15 +243,14 @@ def _plot_2d_collage(
     random,
 ):
     """Internal plot collage for multiprocessing."""
-    plane_point = planes["center"].point
     atlas = get_atlas(atlas_path)
 
     rotation_matrix = get_plane_rotation_matrix(
-        planes["center"], atlas.orientations.lookup(plane_point)[0]
+        planes["center"], atlas.orientations.lookup(planes["center"].point)[0]
     )
 
     X, Y, layers = get_annotation_info(
-        layer_annotation["annotation"], plane_point, rotation_matrix, n_pixels
+        layer_annotation["annotation"], planes["center"].point, rotation_matrix, n_pixels
     )
 
     plane_point_left = planes["left"].point
@@ -254,15 +272,33 @@ def _plot_2d_collage(
     )
 
     layer_ids = np.array([-1] + list(layer_annotation["mapping"].keys())) + 1
-
-    cmap = matplotlib.colors.ListedColormap(
-        ["0.8"] + [f"C{i}" for i in layer_annotation["mapping"]]
-    )
+    colors = ["0.8"] + [f"C{i}" for i in layer_annotation["mapping"]]
+    cmap = matplotlib.colors.ListedColormap(colors)
 
     fig = plt.figure(figsize=figsize)
-    plt.pcolormesh(X, Y, layers, shading="nearest", cmap=cmap, alpha=0.2)
-    plt.contour(X_left, Y_left, layers_left, cmap=cmap, linestyles="dashed", linewidths=0.5)
-    plt.contour(X_right, Y_right, layers_right, cmap=cmap, linestyles="dotted", linewidths=0.5)
+    plt.pcolormesh(
+        X, Y, layers, shading="nearest", cmap=cmap, alpha=0.2, vmin=0, vmax=len(colors) - 1
+    )
+    plt.contour(
+        X_left,
+        Y_left,
+        layers_left,
+        cmap=cmap,
+        linestyles="dashed",
+        linewidths=0.5,
+        vmin=0,
+        vmax=len(colors) - 1,
+    )
+    plt.contour(
+        X_right,
+        Y_right,
+        layers_right,
+        cmap=cmap,
+        linestyles="dotted",
+        linewidths=0.5,
+        vmin=0,
+        vmax=len(colors) - 1,
+    )
     bounds = list(layer_ids - 0.5) + [layer_ids[-1] + 0.5]
     norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
     cbar = plt.colorbar(
@@ -278,8 +314,7 @@ def _plot_2d_collage(
         plot_cells(
             plt.gca(),
             cells_df,
-            planes["left"],
-            planes["right"],
+            planes,
             rotation_matrix=rotation_matrix,
             mtype=mtype,
             sample=sample,
@@ -292,7 +327,7 @@ def _plot_2d_collage(
         X_y, Y_y, orientation_u, orientation_v = get_y_info(
             layer_annotation["annotation"],
             atlas,
-            plane_point,
+            planes["center"].point,
             rotation_matrix,
             n_pixels_y,
         )
@@ -311,7 +346,7 @@ def _plot_2d_collage(
     ax = plt.gca()
     ax.set_aspect("equal")
     ax.set_rasterized(True)
-    ax.set_title(f"plane coord: {plane_point}")
+    ax.set_title(f"plane coord: {planes['center'].point}")
     plt.tight_layout()
     return fig
 
@@ -328,7 +363,7 @@ def plot_2d_collage(
     nb_jobs=-1,
     joblib_verbose=10,
     dpi=200,
-    n_pixels=1000,
+    n_pixels=100,
     with_y_field=True,
     n_pixels_y=20,
     plot_neuron_kwargs=None,

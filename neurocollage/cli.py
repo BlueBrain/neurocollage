@@ -178,6 +178,21 @@ def _select_args(func, kwargs, mapping=None):
     type=click.FloatRange(min=0, min_open=True),
     help="The thickness of each plane slice.",
 )
+@click.option(
+    "--planes-centerline-first-bound",
+    help="Centerline first bound",
+    type=ListParam(),
+)
+@click.option(
+    "--planes-centerline-last-bound",
+    help="Centerline last bound",
+    type=ListParam(),
+)
+@click.option(
+    "--planes-centerline-axis",
+    help="Centerline axis",
+    type=click.IntRange(min=0, max=2, min_open=True, max_open=True),
+)
 @click.option("--collage-pdf-filename", type=click.Path(), help="The output file name.")
 @click.option(
     "--collage-dpi",

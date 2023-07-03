@@ -22,7 +22,6 @@ reqs = [
     "matplotlib>=3.4",
     "morph_tool>=2.9",
     "neurom>=3.2",
-    "neurots>=3.3.1",
     "numpy>=1.23",
     "pandas>=1.5",
     "pyglet>=2",

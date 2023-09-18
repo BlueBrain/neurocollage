@@ -128,7 +128,8 @@ def create_planes(
     centerline_first_bound=None,
     centerline_last_bound=None,
     centerline_axis=0,
-):  # pylint:disable=too-many-branches
+    seed=42,
+):  # pylint:disable=too-many-branches,too-many-locals
     """Create planes in an atlas.
 
     We create 3 * plane_count such each triplet of planes define the left, center
@@ -149,6 +150,7 @@ def create_planes(
         centerline_last_bound (list): (for plane_type == centerline) location of last bound
             for centerline (in voxcell index)
         centerline_axis (str): (for plane_type = aligned) axis along which to create planes
+        seed (int): fix seed for centerline creation
     """
     if plane_type == "centerline_straight":
         if centerline_first_bound is None and centerline_last_bound is None:
@@ -178,6 +180,7 @@ def create_planes(
         else:
             bounds = [centerline_first_bound, centerline_last_bound]
 
+        np.random.seed(seed)
         centerline = create_centerline(layer_annotation["annotation"], bounds)
         centerline = _smoothing(centerline)
 

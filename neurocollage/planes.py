@@ -243,18 +243,23 @@ def get_layer_annotation(atlas_path, region, hemisphere=None):
         region_mask = None
 
     layer_mapping = {}
-    for layer_id, layer in enumerate(atlas_helper.layers[region]):
-        layer_mapping[layer_id] = atlas_helper.region_structure[region]["names"].get(
-            layer, str(layer)
-        )
-        region_query = atlas_helper.region_structure[region]["region_queries"][layer]
-        mask = atlas_helper.atlas.get_region_mask(region_query).raw
-        if region_mask is not None:
-            mask *= region_mask
-        layers_data[mask] = layer_id + 1
-        if not len(layers_data[mask]):
-            L.warning("No voxel found for layer %s.", layer)
+    if atlas_helper.layers[region]:
+        for layer_id, layer in enumerate(atlas_helper.layers[region]):
+            layer_mapping[layer_id] = atlas_helper.region_structure[region]["names"].get(
+                layer, str(layer)
+            )
+            region_query = atlas_helper.region_structure[region]["region_queries"][layer]
+            mask = atlas_helper.atlas.get_region_mask(region_query).raw
+            if region_mask is not None:
+                mask *= region_mask
+            layers_data[mask] = layer_id + 1
+            if not len(layers_data[mask]):
+                L.warning("No voxel found for layer %s.", layer)
 
+    else:
+        layer_mapping = {1: region}
+        mask = atlas_helper.atlas.get_region_mask(region).raw
+        layers_data[mask] = 1
     if hemisphere is not None:
         layers_data = halve_atlas(layers_data, side=hemisphere)
 

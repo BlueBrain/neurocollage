@@ -127,6 +127,7 @@ def _select_args(func, kwargs, mapping=None):
 
 
 @click.command("collage")
+@click.version_option()
 @click.option(
     "-c",
     "--config",

@@ -45,7 +45,8 @@ test_reqs = [
     "coverage>=6.5,<7",
     "pytest>=6",
     "pytest-click>=1",
-    "pytest-cov>=3,<4",
+    "pytest-console-scripts>=1.3",
+    "pytest-cov>=3",
     "pytest-html>=2",
 ]
 

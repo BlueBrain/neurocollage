@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier
 
-_commit: 0.1.38
+_commit: 0.1.52
 _src_path: git@bbpgitlab.epfl.ch:neuromath/python-template.git
 author_email: bbp-ou-cells@groupes.epfl.ch
 author_name: bbp-ou-cells
@@ -17,8 +17,8 @@ project_url: https://bbpteam.epfl.ch/documentation/projects/neurocollage
 repository_name: neurocollage
 repository_namespace: neuromath
 repository_provider: gitlab
+setup_codeql: false
 ssh_url: git@bbpgitlab.epfl.ch:neuromath/neurocollage.git
-support_py37: false
 team_name: neuromath
 tracker_url: https://bbpteam.epfl.ch/project/issues/projects/CELLS/issues
 use_pyproject_toml: false

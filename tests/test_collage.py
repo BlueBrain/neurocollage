@@ -15,5 +15,6 @@ def test_plot_2d_collage(tmpdir, cells_df, planes, layer_annotation, small_O1_pa
         layer_annotation,
         small_O1_path,
         pdf_filename=pdf_filename,
+        nb_jobs=1,  # Coverage fails with several workers
     )
     # write a test on plot when stable

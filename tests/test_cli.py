@@ -21,3 +21,11 @@ def test_cli(cli_runner, data_path, tmpdir, small_O1_path, cell_collection):
         ],
     )
     assert result.exit_code == 0
+
+
+def test_entry_point(script_runner):
+    """Test the entry point."""
+    ret = script_runner.run("neurocollage", "--version")
+    assert ret.success
+    assert ret.stdout.startswith("neurocollage, version ")
+    assert ret.stderr == ""

@@ -7,6 +7,7 @@ import pyglet
 import trimesh
 from neurom import NeuriteType
 from region_grower.atlas_helper import AtlasHelper
+from tqdm import tqdm
 from trimesh.voxel import VoxelGrid
 from voxcell.nexus.voxelbrain import Atlas
 
@@ -133,12 +134,18 @@ class MeshHelper(AtlasHelper):
     def get_meshes(self, plane=None):
         """Get layer pia and region meshes."""
         meshes = self.get_layer_meshes()
-        meshes.append(self.get_pia_mesh())
+        try:
+            meshes.append(self.get_pia_mesh())
+        except AttributeError:
+            print("We cannot get the pia mesh")
         meshes.append(self.get_boundary_mesh())
         if plane is not None:
             meshes = self.slice_meshes(meshes, plane)
         else:
-            meshes.append(self.get_total_boundary_mesh())
+            try:
+                meshes.append(self.get_total_boundary_mesh())
+            except AttributeError:
+                print("We cannot get the total boundary mesh")
         return meshes
 
     def positions_to_indices(self, points):
@@ -188,7 +195,10 @@ class MeshHelper(AtlasHelper):
         }
         for neurite in morph.neurites:
             for section in neurite.iter_sections():
-                path = trimesh.load_path(self.positions_to_indices(section.points[:, :3]))
+                points = self.positions_to_indices(section.points[:, :3])
+                if -1 in points.flatten():
+                    continue
+                path = trimesh.load_path(points)
                 path.colors = [colors[neurite.type]]
                 paths.append(path)
         return paths
@@ -196,7 +206,7 @@ class MeshHelper(AtlasHelper):
     def load_morphs(self, cells_df):
         """Load multiple morphologies."""
         paths = []
-        for gid in cells_df.index:
+        for gid in tqdm(cells_df.index):
             m = load_insitu_morphology(cells_df, gid)
             paths += self.load_morph(m)
         return paths

@@ -432,7 +432,20 @@ def plot_3d_collage(
 
     centerline_data = [trimesh.points.PointCloud(mesh_helper.positions_to_indices(centerline))]
     plane_data = [mesh_helper.load_planes(planes)]
-    mesh_helper.render(data=plane_data + centerline_data)
+    cell_data = mesh_helper.load_morphs(cells_df)
+    boundary_meshes = []
+    if "boundaries" in mesh_helper.region_structure[region]:
+        for boundary in mesh_helper.region_structure[region]["boundaries"]:
+            mesh_path = Path(atlas_path["structure"]).parent / boundary["path"]
+            if mesh_path.is_dir():
+                for _mesh_path in mesh_path.iterdir():
+                    boundary_meshes.append(trimesh.load_mesh(_mesh_path))
+            else:
+                boundary_meshes.append(trimesh.load_mesh(mesh_path))
+
+    data = boundary_meshes + plane_data + cell_data + centerline_data
+    mesh_helper.render(data=data)
+    mesh_helper.show()
 
     cells_df = cells_df[cells_df.mtype == mtype]
     for plane in planes:

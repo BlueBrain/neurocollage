@@ -1,5 +1,22 @@
 # Changelog
 
+## [neurocollage-v0.3.2](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.1...neurocollage-v0.3.2)
+
+> 3 November 2023
+
+### Build
+
+- Bump bluepysnap (Adrien Berchet - [4b6c908](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/4b6c9080caccd9c6fc63973d10b2a019f2438cea))
+
+### New Features
+
+- Handle data without layers (arnaudon - [4a31376](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/4a313766e9d32c8ff7cdb2f12ee0661004cde2e8))
+
+### Fixes
+
+- Small improvements on 3d collage (Alexis Arnaudon - [e1e4075](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/e1e40750a837e048fd2800f57f0bdd3a8f494d9f))
+- Fix centerline seed (Alexis Arnaudon - [6e2029d](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/6e2029d8bf2153f40c1e48644ed35f015a60fdeb))
+
 ## [neurocollage-v0.3.1](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.0...neurocollage-v0.3.1)
 
 > 3 July 2023
@@ -43,14 +60,13 @@
 
 - Adding 3d collage and related functions (Alexis Arnaudon - [e98d7c5](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/e98d7c5189b2b81f3f2b5737e6331e0b7120dba9))
 
-## neurocollage-v0.1.4
+## [neurocollage-v0.1.4](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.3...neurocollage-v0.1.4)
 
 > 6 September 2022
 
 ### Documentation Changes
 
 - Display image in both the README and the documentation (Adrien Berchet - [43d759f](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/43d759fce6e6679adbcd19ab2966383d2cbf4fc7))
-- Improve documentation and add an output image example (Alexis Arnaudon - [edef71a](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/edef71aea41444e74ea0a0108e7e8126d83d550b))
 
 ### Refactoring and Updates
 
@@ -66,10 +82,39 @@
 
 ### General Changes
 
-- Initial code (Alexis Arnaudon - [d417652](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/d417652e36c58cac7aa8171d1d77a6733dd09332))
-- Initial commit (Adrien Berchet - [b90d31d](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/b90d31d60661873dab4c2bd217bb42ab7cbd28bc))
 - Add plot of left/right planes (Alexis Arnaudon - [d897bba](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/d897bba5970eaaf5194a13e383998656d558a8f1))
-- Improve doc (Adrien Berchet - [1f62c93](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/1f62c9304a68ad21769e161d3cc1054f83bbce2f))
 - Improvements (Alexis Arnaudon - [5c4342c](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/5c4342ccc544768009a3c64e92e86a9c386db988))
 - Use furthest away cells (Alexis Arnaudon - [686188d](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/686188d0d44ff624c6c5d2a5a9abac46373fd59d))
+
+## [neurocollage-v0.1.3](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.2...neurocollage-v0.1.3)
+
+> 10 August 2022
+
+### Documentation Changes
+
+- Improve documentation and add an output image example (Alexis Arnaudon - [edef71a](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/edef71aea41444e74ea0a0108e7e8126d83d550b))
+
+## [neurocollage-v0.1.2](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.1...neurocollage-v0.1.2)
+
+> 9 August 2022
+
+### General Changes
+
+- Improve doc (Adrien Berchet - [1f62c93](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/1f62c9304a68ad21769e161d3cc1054f83bbce2f))
+
+## [neurocollage-v0.1.1](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.1.0...neurocollage-v0.1.1)
+
+> 8 August 2022
+
+### General Changes
+
 - Set package name to lower case (Adrien Berchet - [303bf40](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/303bf40a5fbd59545446b627c3a347bfb3745a32))
+
+## neurocollage-v0.1.0
+
+> 8 August 2022
+
+### General Changes
+
+- Initial code (Alexis Arnaudon - [d417652](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/d417652e36c58cac7aa8171d1d77a6733dd09332))
+- Initial commit (Adrien Berchet - [b90d31d](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/b90d31d60661873dab4c2bd217bb42ab7cbd28bc))

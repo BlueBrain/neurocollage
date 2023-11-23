@@ -206,15 +206,24 @@ def create_planes(
 
     # create all planes to match slice_thickness between every two planes
     shift = slice_thickness / np.linalg.norm(np.diff(centerline, axis=0), axis=1).sum()
+    _plane_count = plane_count
+    if plane_count == 1:
+        _plane_count = 3
+
     left_planes = _create_planes(
-        centerline, steps=np.clip(np.linspace(0, 1 - 2 * shift, plane_count), 0, 1)
+        centerline, steps=np.clip(np.linspace(0, 1 - 2 * shift, _plane_count), 0, 1)
     )
     center_planes = _create_planes(
-        centerline, steps=np.clip(np.linspace(shift, 1 - shift, plane_count), 0, 1)
+        centerline, steps=np.clip(np.linspace(shift, 1 - shift, _plane_count), 0, 1)
     )
     right_planes = _create_planes(
-        centerline, steps=np.clip(np.linspace(2 * shift, 1.0, plane_count), 0, 1)
+        centerline, steps=np.clip(np.linspace(2 * shift, 1.0, _plane_count), 0, 1)
     )
+
+    if plane_count == 1:
+        left_planes = [left_planes[1]]
+        right_planes = [right_planes[1]]
+        center_planes = [center_planes[1]]
 
     planes = []
     for l_plane, c_plane, r_plane in zip(left_planes, center_planes, right_planes):

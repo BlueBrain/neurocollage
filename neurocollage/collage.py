@@ -160,7 +160,7 @@ def get_greedy_perm(X, sample):
         idx_perm[i] = idx
         dperm2all.append(_dpoint2pointcloud(X, idx))
         ds = np.minimum(ds, dperm2all[-1])
-    return idx_perm
+    return list(set(idx_perm))
 
 
 # pylint: disable=too-many-locals,too-many-branches
@@ -183,7 +183,6 @@ def plot_cells(
     _plot_neuron_kwargs = {"realistic_diameters": True}
     if plot_neuron_kwargs is not None:
         _plot_neuron_kwargs.update(plot_neuron_kwargs)
-
     cells_df = get_cells_between_planes(cells_df, planes["left"], planes["right"])
     gids = []
     if len(cells_df.index) > 0:

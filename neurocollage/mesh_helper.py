@@ -52,9 +52,13 @@ class MeshHelper(AtlasHelper):
         """Setter for layer_annotation."""
         self._layer_annotation = layer_annotation
 
-    def get_boundary_mesh(self):
+    def get_boundary_mesh(self, subregion=None):
         """Create boundary mesh."""
-        boundary_mesh = VoxelGrid(self.annotation.raw).marching_cubes
+        data = deepcopy(self.annotation.raw)
+        if subregion is not None:
+            mask = self.atlas.get_region_mask(subregion).raw
+            data[~mask] = 0
+        boundary_mesh = VoxelGrid(data).marching_cubes
         boundary_mesh.visual.face_colors = [100, 100, 100, 100]
         return boundary_mesh
 

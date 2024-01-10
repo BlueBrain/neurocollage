@@ -83,9 +83,21 @@ def layer_annotation(small_O1_path):
 
 
 @pytest.fixture(scope="function")
-def planes(layer_annotation):
+def planes_and_centerline(layer_annotation):
     """Planes."""
-    return create_planes(layer_annotation, plane_count=5)[0]
+    return create_planes(layer_annotation, plane_count=5)
+
+
+@pytest.fixture(scope="function")
+def planes(planes_and_centerline):
+    """Planes."""
+    return planes_and_centerline[0]
+
+
+@pytest.fixture(scope="function")
+def centerline(planes_and_centerline):
+    """Planes."""
+    return planes_and_centerline[1]
 
 
 def make_cell_density(small_O1_path, layer_annotation):

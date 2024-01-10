@@ -72,20 +72,20 @@ def _get_plane_grid(annotation, plane_origin, rotation_matrix, n_pixels):
     pts = (pts - plane_origin).dot(rotation_matrix.T)  # move to plane space
 
     # get points in the plane only
-    pts = pts[
+    plane_pts = pts[
         (pts[:, 2] > -annotation.voxel_dimensions[2]) & (pts[:, 2] < annotation.voxel_dimensions[2])
     ]
-    if not len(pts):
-        pts = pts[
+    if not len(plane_pts):
+        plane_pts = pts[
             (pts[:, 2] > -2 * annotation.voxel_dimensions[2])
             & (pts[:, 2] < 2 * annotation.voxel_dimensions[2])
         ]
 
     # get bbox of the points
-    x_min = pts[np.argmin(pts[:, 0]), 0]
-    x_max = pts[np.argmax(pts[:, 0]), 0]
-    y_min = pts[np.argmin(pts[:, 1]), 1]
-    y_max = pts[np.argmax(pts[:, 1]), 1]
+    x_min = plane_pts[np.argmin(plane_pts[:, 0]), 0]
+    x_max = plane_pts[np.argmax(plane_pts[:, 0]), 0]
+    y_min = plane_pts[np.argmin(plane_pts[:, 1]), 1]
+    y_max = plane_pts[np.argmax(plane_pts[:, 1]), 1]
 
     # create the grid in plane coordinates
     xs_plane = np.linspace(x_min, x_max, n_pixels)
@@ -423,7 +423,17 @@ def plot_2d_collage(
 
 
 def plot_3d_collage(
-    cells_df, planes, layer_annotation, atlas_path, mtype, region, hemisphere, centerline, sample
+    cells_df,
+    planes,
+    layer_annotation,
+    atlas_path,
+    mtype,
+    region,
+    hemisphere,
+    centerline,
+    sample=10,
+    filename=None,
+    show=False,
 ):
     """Plot 3d collage with trimesh."""
     mesh_helper = MeshHelper(atlas_path, region, hemisphere)
@@ -443,13 +453,15 @@ def plot_3d_collage(
                 boundary_meshes.append(trimesh.load_mesh(mesh_path))
 
     data = boundary_meshes + plane_data + cell_data + centerline_data
-    mesh_helper.render(data=data)
-    mesh_helper.show()
+    mesh_helper.render(data=data, filename=filename)
+    if show:
+        mesh_helper.show()
 
     cells_df = cells_df[cells_df.mtype == mtype]
     for plane in planes:
         _cells_df = get_cells_between_planes(cells_df, plane["left"], plane["right"])
         _cells_df = _cells_df.sample(min(sample, len(_cells_df.index)))
         cell_data = mesh_helper.load_morphs(_cells_df)
-        mesh_helper.render(data=cell_data, plane=plane)
-    mesh_helper.show()
+        mesh_helper.render(data=cell_data, plane=plane, filename=filename)
+    if show:
+        mesh_helper.show()

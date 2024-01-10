@@ -32,6 +32,7 @@ class MeshHelper(AtlasHelper):
 
         self._layer_annotation = None
         self._boundary_mask = None
+        self._depths = None
 
     @property
     def annotation(self):
@@ -52,6 +53,13 @@ class MeshHelper(AtlasHelper):
         """Setter for layer_annotation."""
         self._layer_annotation = layer_annotation
 
+    @property
+    def depths(self):
+        """Returns the depths in the associated brain region."""
+        if self._depths is None:
+            self._depths = self.compute_region_depth(self.region)
+        return self._depths
+
     def get_boundary_mesh(self, subregion=None):
         """Create boundary mesh."""
         data = deepcopy(self.annotation.raw)
@@ -64,7 +72,7 @@ class MeshHelper(AtlasHelper):
 
     def get_total_boundary_mesh(self):
         """Get entire boundary mesh where depth is defined."""
-        data = self.depths[self.region].raw
+        data = self.depths.raw
         data[np.isnan(data)] = 0
         data[data > 0] = 1
         mesh = VoxelGrid(data).marching_cubes
@@ -73,7 +81,7 @@ class MeshHelper(AtlasHelper):
 
     def get_pia_mesh(self, cutoff=3):
         """Get pia mesh."""
-        data = self.depths[self.region].raw
+        data = self.depths.raw
 
         # ensures there is 0 in outer voxels for boundary detection
         data[:, :, 0] = 0
@@ -83,7 +91,7 @@ class MeshHelper(AtlasHelper):
         data[0, :, :] = 0
         data[-1, :, :] = 0
 
-        data[data > cutoff * np.mean(abs(self.depths[self.region].voxel_dimensions))] = 0
+        data[data > cutoff * np.mean(abs(self.depths.voxel_dimensions))] = 0
         data[np.isnan(data)] = 0
 
         mesh = self._get_mesh(VoxelGrid(data), self.boundary_mask)

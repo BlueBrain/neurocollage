@@ -1,5 +1,17 @@
 # Changelog
 
+## [neurocollage-v0.3.3](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.2...neurocollage-v0.3.3)
+
+> 10 January 2024
+
+### Build
+
+- Bump region-grower (Adrien Berchet - [9fcc593](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/9fcc59327367f9b1810d96dbabc5517eea34da0e))
+
+### New Features
+
+- Small improvements (Alexis Arnaudon - [fbbe42d](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/fbbe42d088dc832a288421388647ab71800d04b7))
+
 ## [neurocollage-v0.3.2](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.1...neurocollage-v0.3.2)
 
 > 3 November 2023

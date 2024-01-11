@@ -192,7 +192,7 @@ def _select_args(func, kwargs, mapping=None):
 @click.option(
     "--planes-centerline-axis",
     help="Centerline axis",
-    type=click.IntRange(min=0, max=2, min_open=True, max_open=True),
+    type=click.IntRange(min=0, max=2, min_open=False, max_open=False),
 )
 @click.option("--collage-pdf-filename", type=click.Path(), help="The output file name.")
 @click.option(

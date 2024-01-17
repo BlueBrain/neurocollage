@@ -17,6 +17,8 @@ from neurocollage.utils import load_insitu_morphology
 # this is for .marching_cube.visual which exists
 # pylint: disable=no-member
 
+PIA_DIRECTION = [0, 1, 0]
+
 
 class MeshHelper(AtlasHelper):
     """Helper class to deal with meshes in atlas with trimesh."""
@@ -245,6 +247,27 @@ class MeshHelper(AtlasHelper):
                 print("cannot load a plane, it may be too close to edges.")
 
         return meshes
+
+    def get_vector_field(self, n_vec=10, length=5):
+        """Get vector field from orientations as points and line objects to plot."""
+        region_mask = self.atlas.get_region_mask(self.region)
+        bbox = region_mask.bbox
+        X = np.linspace(bbox[0, 0], bbox[1, 0], n_vec)
+        Y = np.linspace(bbox[0, 1], bbox[1, 1], n_vec)
+        Z = np.linspace(bbox[0, 2], bbox[1, 2], n_vec)
+        x, y, z = np.meshgrid(X, Y, Z)
+        points = np.array([x.flatten(), y.flatten(), z.flatten()]).T
+        points = points[region_mask.lookup(points, outer_value=False)]
+        orientations = self.orientations.lookup(points).dot(PIA_DIRECTION)
+        points = region_mask.positions_to_indices(points)
+
+        data = []
+        for point, orientation in zip(points, orientations):
+            ray = np.array([point, point + orientation * length])
+            data.append(trimesh.load_path(ray))
+
+        data.append(trimesh.points.PointCloud(points + orientations * length))
+        return data
 
     def render(self, data=None, plane=None, filename=None, show=True, line_width=1.0):
         """Render the meshes with additional data.

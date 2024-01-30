@@ -248,8 +248,10 @@ class MeshHelper(AtlasHelper):
 
         return meshes
 
-    def get_vector_field(self, n_vec=10, length=5):
+    def get_vector_field(self, n_vec=10, length=5, direction=None):
         """Get vector field from orientations as points and line objects to plot."""
+        if direction is None:
+            direction = PIA_DIRECTION
         region_mask = self.atlas.get_region_mask(self.region)
         bbox = region_mask.bbox
         X = np.linspace(bbox[0, 0], bbox[1, 0], n_vec)
@@ -258,7 +260,7 @@ class MeshHelper(AtlasHelper):
         x, y, z = np.meshgrid(X, Y, Z)
         points = np.array([x.flatten(), y.flatten(), z.flatten()]).T
         points = points[region_mask.lookup(points, outer_value=False)]
-        orientations = self.orientations.lookup(points).dot(PIA_DIRECTION)
+        orientations = self.orientations.lookup(points).dot(direction)
         points = region_mask.positions_to_indices(points)
 
         data = []

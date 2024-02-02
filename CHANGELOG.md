@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.4](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.3...0.3.4)
+
+> 2 February 2024
+
+### New Features
+
+- Add 3d vector fields (Alexis Arnaudon - [31114b1](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/31114b1ab8401ea489f5123b925c90fa5fad6a98))
+- More 3d vector fields (Alexis Arnaudon - [07bf34c](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/07bf34c67d0aa86386122da67fab6eb1be03617f))
+
+### Fixes
+
+- Axis bounds (Alexis Arnaudon - [73a34d9](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/73a34d951dd22c52258110a6aa76d33fd6aa6656))
+
 ## [neurocollage-v0.3.3](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.2...neurocollage-v0.3.3)
 
 > 10 January 2024

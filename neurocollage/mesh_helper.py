@@ -7,11 +7,13 @@ import pyglet
 import trimesh
 from neurom import NeuriteType
 from region_grower.atlas_helper import AtlasHelper
+from scipy import ndimage
 from tqdm import tqdm
 from trimesh.voxel import VoxelGrid
 from voxcell.nexus.voxelbrain import Atlas
 
 from neurocollage.planes import get_layer_annotation
+from neurocollage.planes import halve_atlas
 from neurocollage.utils import load_insitu_morphology
 
 # this is for .marching_cube.visual which exists
@@ -248,17 +250,24 @@ class MeshHelper(AtlasHelper):
 
         return meshes
 
-    def get_vector_field(self, n_vec=10, length=5, direction=None):
+    def get_vector_field(self, step=1, length=5, direction=None, hemisphere=None, slices=None):
         """Get vector field from orientations as points and line objects to plot."""
         if direction is None:
             direction = PIA_DIRECTION
+
         region_mask = self.atlas.get_region_mask(self.region)
-        bbox = region_mask.bbox
-        X = np.linspace(bbox[0, 0], bbox[1, 0], n_vec)
-        Y = np.linspace(bbox[0, 1], bbox[1, 1], n_vec)
-        Z = np.linspace(bbox[0, 2], bbox[1, 2], n_vec)
+        if hemisphere is not None:
+            region_mask.raw = halve_atlas(region_mask.raw, side=hemisphere)
+
+        if slices is None:
+            slices = ndimage.find_objects(region_mask.raw)[0]
+
+        X = np.arange(slices[0].start, slices[0].stop, step)
+        Y = np.arange(slices[1].start, slices[1].stop, step)
+        Z = np.arange(slices[2].start, slices[2].stop, step)
         x, y, z = np.meshgrid(X, Y, Z)
         points = np.array([x.flatten(), y.flatten(), z.flatten()]).T
+        points = region_mask.indices_to_positions(points)
         points = points[region_mask.lookup(points, outer_value=False)]
         orientations = self.orientations.lookup(points).dot(direction)
         points = region_mask.positions_to_indices(points)
@@ -268,7 +277,7 @@ class MeshHelper(AtlasHelper):
             ray = np.array([point, point + orientation * length])
             data.append(trimesh.load_path(ray))
 
-        data.append(trimesh.points.PointCloud(points + orientations * length))
+        data.append(trimesh.points.PointCloud(points))
         return data
 
     def render(self, data=None, plane=None, filename=None, show=True, line_width=1.0):

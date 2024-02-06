@@ -1,5 +1,7 @@
 """2D collage with matplotlib."""
 import logging
+import shutil
+import subprocess
 from functools import partial
 from pathlib import Path
 
@@ -374,6 +376,7 @@ def plot_2d_collage(
     cells_wire_plot=False,
     figsize=(20, 20),
     random=False,
+    video=False,
 ):
     """Plot collage of an mtype and a list of planes.
 
@@ -397,29 +400,49 @@ def plot_2d_collage(
         cells_wire_plot (bool): if true, do not use neurom.view, but plt.plot
         figsize (tuple(int, int)): the size of the figure
         random (bool): randomly select cells if True, or select furthest away cells
+        video (bool): instead of saving a pdf, we generate a video across planes
+            frames are saved in folder named from pdf_filename, and video as [pdf_filename.stem].mp4
     """
-    Path(pdf_filename).parent.mkdir(parents=True, exist_ok=True)
-    with PdfPages(pdf_filename) as pdf:
-        f = partial(
-            _plot_2d_collage,
-            layer_annotation=layer_annotation,
-            cells_df=cells_df,
-            mtype=mtype,
-            atlas_path=atlas_path,
-            sample=sample,
-            n_pixels=n_pixels,
-            n_pixels_y=n_pixels_y,
-            with_y_field=with_y_field,
-            plot_neuron_kwargs=plot_neuron_kwargs,
-            with_cells=with_cells,
-            cells_linear_density=cells_linear_density,
-            cells_wire_plot=cells_wire_plot,
-            figsize=figsize,
-            random=random,
-        )
-        for fig in Parallel(nb_jobs, verbose=joblib_verbose)(delayed(f)(plane) for plane in planes):
-            pdf.savefig(fig, bbox_inches="tight", dpi=dpi)
+    f = partial(
+        _plot_2d_collage,
+        layer_annotation=layer_annotation,
+        cells_df=cells_df,
+        mtype=mtype,
+        atlas_path=atlas_path,
+        sample=sample,
+        n_pixels=n_pixels,
+        n_pixels_y=n_pixels_y,
+        with_y_field=with_y_field,
+        plot_neuron_kwargs=plot_neuron_kwargs,
+        with_cells=with_cells,
+        cells_linear_density=cells_linear_density,
+        cells_wire_plot=cells_wire_plot,
+        figsize=figsize,
+        random=random,
+    )
+    if not video:
+        Path(pdf_filename).parent.mkdir(parents=True, exist_ok=True)
+        with PdfPages(pdf_filename) as pdf:
+            for fig in Parallel(nb_jobs, verbose=joblib_verbose)(
+                delayed(f)(plane) for plane in planes
+            ):
+                pdf.savefig(fig, bbox_inches="tight", dpi=dpi)
+                plt.close(fig)
+    else:
+        frame_path = Path(Path(pdf_filename).stem)
+        if frame_path.exists():
+            shutil.rmtree(frame_path)
+        frame_path.mkdir(parents=True, exist_ok=True)
+        for i, fig in enumerate(
+            Parallel(nb_jobs, verbose=joblib_verbose)(delayed(f)(plane) for plane in planes)
+        ):
+            fig.savefig(frame_path / f"frame_{i:04d}.png", bbox_inches="tight", dpi=dpi)
             plt.close(fig)
+        # make the video with ffmpeg, assuming it is installed
+        video_cmd = f"""ffmpeg -framerate 2 -pattern_type glob -i '{frame_path}/*.png' \
+            -c:v libx264 -pix_fmt yuv420p {frame_path}.mp4 -y"""
+        L.info("To make the video again if it fails, use the command: %s", video_cmd)
+        subprocess.run(video_cmd, shell=True, check=True)
 
 
 def plot_3d_collage(

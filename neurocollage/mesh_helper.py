@@ -250,8 +250,19 @@ class MeshHelper(AtlasHelper):
 
         return meshes
 
-    def get_vector_field(self, step=1, length=5, direction=None, hemisphere=None, slices=None):
-        """Get vector field from orientations as points and line objects to plot."""
+    def get_vector_field(
+        self, step=1.0, length=5.0, direction=None, hemisphere=None, slices=None, plane=None
+    ):
+        """Get vector field from orientations as points and line objects to plot.
+
+        Args:
+            step (float): number of vectors per voxel in each direction
+            length (float): lengths of vectors
+            direction (list): vector direction (default is PIA_DIRECTION=[0, 1, 0])
+            hemisphere (bool): which hemisphere to onsider
+            slices (bool): to specify a custom bounding box, default to region mask
+            plane (dict): a dict representing a plane to plot only within it
+        """
         if direction is None:
             direction = PIA_DIRECTION
 
@@ -269,6 +280,14 @@ class MeshHelper(AtlasHelper):
         points = np.array([x.flatten(), y.flatten(), z.flatten()]).T
         points = region_mask.indices_to_positions(points)
         points = points[region_mask.lookup(points, outer_value=False)]
+
+        if plane is not None:
+            eq_left = plane["left"].get_equation()
+            eq_right = plane["right"].get_equation()
+            left = np.einsum("j,ij", eq_left[:3], points)
+            right = np.einsum("j,ij", eq_right[:3], points)
+            points = points[(left > eq_left[3]) & (right < eq_right[3])]
+
         orientations = self.orientations.lookup(points).dot(direction)
         points = region_mask.positions_to_indices(points)
 

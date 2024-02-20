@@ -49,7 +49,7 @@ def _get_cell_df_from_circuit_sonata(circuit_path, ext=None, group=None):
     circuit = bluepysnap.Circuit(circuit_path)
     for node in circuit.nodes.values():
         if node.type == "biophysical":
-            path = node.morph._get_morph_dir(extension=ext) + "/"
+            path = node.morph.get_morphology_dir(extension=ext) + "/"
             df = node.get(group=group)
             # add orientation as rotation matrix
             df["orientation"] = node.orientations()

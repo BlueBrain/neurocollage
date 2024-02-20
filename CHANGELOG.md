@@ -1,5 +1,18 @@
 # Changelog
 
+## [neurocollage-v0.3.5](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.4...neurocollage-v0.3.5)
+
+> 20 February 2024
+
+### Build
+
+- Bump BluePySnap (Adrien Berchet - [730e02b](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/730e02b429d62c44c1c2d853c7291498e656c626))
+
+### New Features
+
+- Option to make video of 2d collages (Alexis Arnaudon - [cc9dbfc](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/cc9dbfcaf0dd7ee05190a4c2456de8edef198666))
+- Add plane option to 3d vectors (Alexis Arnaudon - [e338501](https://bbpgitlab.epfl.ch/neuromath/neurocollage/commit/e3385018aa4fb8f7272deb617e443a1f8beb0074))
+
 ## [neurocollage-v0.3.4](https://bbpgitlab.epfl.ch/neuromath/neurocollage/compare/neurocollage-v0.3.3...neurocollage-v0.3.4)
 
 > 2 February 2024

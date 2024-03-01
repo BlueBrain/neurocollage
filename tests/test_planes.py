@@ -1,11 +1,11 @@
 """Tes planes module."""
 from pathlib import Path
 
-from atlas_analysis.planes.planes import load_planes_centerline
 from numpy.testing import assert_array_equal
 from voxcell.nexus.voxelbrain import VoxelData
 
 from neurocollage import planes as tested
+from neurocollage.planes_utils.planes import load_planes_centerline
 
 DATA = Path(__file__).parent / "data"
 

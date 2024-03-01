@@ -1,4 +1,5 @@
 """Setup for the neurocollage package."""
+
 import importlib.util
 from pathlib import Path
 
@@ -14,7 +15,6 @@ spec.loader.exec_module(module)
 VERSION = module.VERSION
 
 reqs = [
-    "atlas_analysis>=0.0.4",
     "brainbuilder>=0.17",
     "bluepysnap>=3.0.1",
     "click>=8",
@@ -33,6 +33,10 @@ reqs = [
     "tqdm>=4.60",
     "trimesh>=3.6",
     "voxcell>=3.1.2",
+    "networkx>=2.3",
+    "geomdl>=5.2.8",
+    "pyquaternion>=0.9.5",
+    "vtk>=9.0.1",
 ]
 
 doc_reqs = [
@@ -43,6 +47,7 @@ doc_reqs = [
 ]
 
 test_reqs = [
+    "nose>=1.3.7",
     "mock>=3",
     "coverage>=6.5,<7",
     "pytest>=6",

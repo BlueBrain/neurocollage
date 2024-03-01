@@ -1,4 +1,5 @@
 """2D collage with matplotlib."""
+
 import logging
 import shutil
 import subprocess
@@ -302,17 +303,15 @@ def _plot_2d_collage(
     )
     bounds = list(layer_ids - 0.5) + [layer_ids[-1] + 0.5]
     norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
-    try:
-        cbar = plt.colorbar(
-            matplotlib.cm.ScalarMappable(cmap=cmap, norm=norm),
-            ticks=layer_ids,
-            boundaries=bounds,
-            shrink=0.3,
-            alpha=0.2,
-        )
-        cbar.ax.set_yticklabels(["outside"] + list(layer_annotation["mapping"].values()))
-    except ValueError:
-        pass
+    cbar = plt.colorbar(
+        matplotlib.cm.ScalarMappable(cmap=cmap, norm=norm),
+        ticks=layer_ids,
+        boundaries=bounds,
+        shrink=0.3,
+        alpha=0.2,
+        ax=plt.gca(),
+    )
+    cbar.ax.set_yticklabels(["outside"] + list(layer_annotation["mapping"].values()))
 
     if with_cells:
         plot_cells(

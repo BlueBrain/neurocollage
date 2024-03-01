@@ -1,16 +1,17 @@
 """Functions for slicing circuit files to place specific cells only."""
+
 import logging
 
 import numpy as np
 import pandas as pd
-from atlas_analysis.planes.planes import _smoothing
-from atlas_analysis.planes.planes import create_centerline
-from atlas_analysis.planes.planes import create_planes as _create_planes
 from region_grower.atlas_helper import AtlasHelper
 from voxcell.exceptions import VoxcellError
 from voxcell.nexus.voxelbrain import Atlas
 
 from neurocollage.exceptions import NeurocollageException
+from neurocollage.planes_utils.planes import _smoothing
+from neurocollage.planes_utils.planes import create_centerline
+from neurocollage.planes_utils.planes import create_planes as _create_planes
 
 L = logging.getLogger(__name__)
 LEFT = "left"

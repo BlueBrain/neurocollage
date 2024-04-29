@@ -8,13 +8,13 @@ from pathlib import Path
 
 import matplotlib
 import matplotlib.pyplot as plt
-import neurom
 import numpy as np
 import trimesh
 from joblib import Parallel
 from joblib import delayed
 from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.resampling import resample_linear_density
+from neurom import load_morphology
 from neurom.view import matplotlib_impl
 from pyquaternion import Quaternion
 from scipy.optimize import fmin
@@ -210,7 +210,7 @@ def plot_cells(
         if linear_density is not None:
             m = resample_linear_density(m, linear_density)
 
-        morphology = neurom.core.Morphology(m)
+        morphology = load_morphology(m)
 
         def _to_plane_coord(p):
             return np.dot(p - planes["center"].point, rotation_matrix.T)

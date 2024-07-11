@@ -15,28 +15,30 @@ spec.loader.exec_module(module)
 VERSION = module.VERSION
 
 reqs = [
-    "brainbuilder>=0.17",
+    "bluepy-configfile>=0.1.21",
+    "bluepy>=2.5.5",
     "bluepysnap>=3.0.1",
+    "brainbuilder>=0.20.1",
     "click>=8",
-    "joblib>=0.14",
+    "geomdl>=5.2.8",
+    "joblib>=1.1",
     "mapbox-earcut>=1",
-    "matplotlib>=3.4",
+    "matplotlib>=3.6",
     "morph_tool>=2.9",
+    "networkx>=2.5",
     "neurom>=3.2",
-    "numpy>=1.23",
-    "pandas>=1.5.3",
+    "numpy>=1.26",
+    "pandas>=2.1",
     "pyglet>=1.5.20,<2",
     "pyquaternion>=0.9.5",
-    "region_grower>=1.2.8",
-    "shapely>=2",
-    "scipy>=1.8",
-    "tqdm>=4.60",
-    "trimesh>=3.6",
-    "voxcell>=3.1.2",
-    "networkx>=2.3",
-    "geomdl>=5.2.8",
     "pyquaternion>=0.9.5",
-    "vtk>=9.0.1",
+    "region_grower>=1.2.8",
+    "scipy>=1.13",
+    "shapely>=2",
+    "tqdm>=4.60",
+    "trimesh>=3.23",
+    "voxcell>=3.1.5",
+    "vtk>=9.0.2",
 ]
 
 doc_reqs = [
@@ -48,7 +50,6 @@ doc_reqs = [
 ]
 
 test_reqs = [
-    "nose>=1.3.7",
     "mock>=3",
     "coverage>=6.5,<7",
     "pytest>=6",
@@ -72,7 +73,7 @@ setup(
     },
     license="BBP-internal-confidential",
     packages=find_namespace_packages(include=["neurocollage*"]),
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     version=VERSION,
     install_requires=reqs,
     extras_require={
@@ -91,10 +92,10 @@ setup(
         "Intended Audience :: Science/Research",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
 )

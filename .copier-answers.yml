@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier
 
-_commit: 0.1.52
+_commit: 0.1.59
 _src_path: git@bbpgitlab.epfl.ch:neuromath/python-template.git
 author_email: bbp-ou-cells@groupes.epfl.ch
 author_name: bbp-ou-cells
@@ -9,7 +9,6 @@ copyright_year: '2022'
 distribution_name: neurocollage
 download_url: https://bbpgitlab.epfl.ch/neuromath/neurocollage
 init_git: false
-maintainer: null
 package_name: neurocollage
 project_description: A tool to create 2D morphology collage plots based on matplotlib.
 project_name: NeuroCollage

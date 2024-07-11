@@ -2,9 +2,9 @@
 import unittest
 import warnings
 
-import nose.tools as nt
 import numpy as np
 import numpy.testing as npt
+import pytest
 from pyquaternion import Quaternion
 
 import neurocollage.planes_utils.maths as tested
@@ -19,15 +19,15 @@ class Test_Plane(unittest.TestCase):
         npt.assert_equal(plane.normal, [2.0 / 3.0, 2.0 / 3.0, 1.0 / 3.0])
 
         # Zero normal vector as input
-        with nt.assert_raises(Exception):
+        with pytest.raises(Exception):
             tested.Plane([1, 1, 2], [0.0, 0.0, 0.0])
 
         # Wrong input length for the anchor point
-        with nt.assert_raises(Exception):
+        with pytest.raises(Exception):
             tested.Plane([0, 1, 1, 2], [1.0, 1.0, 0.0])
 
         # Wrong input length for the normal vector
-        with nt.assert_raises(Exception):
+        with pytest.raises(Exception):
             tested.Plane([1, 1, 2], [1.0, 1.0])
 
     def test_get_equation(self):
@@ -77,7 +77,7 @@ class Test_Plane(unittest.TestCase):
         npt.assert_array_equal(basis, [q.rotate(tested.YVECTOR), q.rotate(tested.ZVECTOR)])
 
         plane = tested.Plane([10.0, -1.0, 0.0], [0.5, 0.3, 311.0])
-        with nt.assert_raises(Exception):  # The basis vectors are not normalized
+        with pytest.raises(Exception):  # The basis vectors are not normalized
             plane.get_basis(np.array([tested.XVECTOR, [0, 1.0, 1.0], [0.0, 1.0, -1.0]]))
 
         reference_basis = np.array(
@@ -105,7 +105,7 @@ class Test_Plane(unittest.TestCase):
         npt.assert_array_almost_equal(plane.normal, Quaternion(quaternion).rotate(tested.YVECTOR))
 
         # Wrong quaternionic input
-        with nt.assert_raises(Exception):
+        with pytest.raises(Exception):
             tested.Plane.from_quaternion([0, 1, 0], [1, 1, 1, 1, 1])
 
     def test_to_numpy(self):
@@ -165,11 +165,11 @@ class Test_Plane(unittest.TestCase):
 
     def test_get_best_alignment_basis_raises(self):
         plane = tested.Plane([1, 1, 1], [1, 0, 0])
-        with nt.assert_raises(Exception):
+        with pytest.raises(Exception):
             plane.get_best_alignment_basis([0, 0, 0])
 
         plane = tested.Plane([1, 1, 1], [0, 10, 100])
-        with nt.assert_raises(Exception):
+        with pytest.raises(Exception):
             plane.get_best_alignment_basis([1, 1, 0], axis=-1)
 
         plane = tested.Plane([1, 1, 1], [0.1, 1.0, 0.2])
@@ -237,8 +237,8 @@ def test_create_orthogonal_planes():
 
 
 def test_create_orthogonal_planes_raises():
-    with nt.assert_raises(Exception):
+    with pytest.raises(Exception):
         tested.create_orthogonal_planes([1, 0, 0], [0, 0, 1], [[0, 0.5, 1]])  # points must be 1D
 
-    with nt.assert_raises(Exception):
+    with pytest.raises(Exception):
         tested.create_orthogonal_planes([1, 0, 0], [1, 0, 0], [0, 1, 2])  # end != start required

@@ -52,11 +52,11 @@ doc_reqs = [
 test_reqs = [
     "mock>=3",
     "coverage>=6.5,<7",
-    "pytest>=6",
-    "pytest-click>=1",
-    "pytest-console-scripts>=1.3",
-    "pytest-cov>=3",
-    "pytest-html>=2",
+    "pytest>=6.1",
+    "pytest-click>=1.1",
+    "pytest-console-scripts>=1.4",
+    "pytest-cov>=4.1",
+    "pytest-html>=3.2",
 ]
 
 setup(

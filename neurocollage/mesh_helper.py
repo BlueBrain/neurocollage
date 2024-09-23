@@ -1,4 +1,5 @@
 """3D collage module."""
+
 from copy import deepcopy
 
 import matplotlib
@@ -35,7 +36,6 @@ class MeshHelper(AtlasHelper):
         self.hemisphere = hemisphere
 
         self._layer_annotation = None
-        self._boundary_mask = None
         self._depths = None
 
     @property
@@ -98,37 +98,18 @@ class MeshHelper(AtlasHelper):
         data[data > cutoff * np.mean(abs(self.depths.voxel_dimensions))] = 0
         data[np.isnan(data)] = 0
 
-        mesh = self._get_mesh(VoxelGrid(data), self.boundary_mask)
+        mesh = self._get_mesh(VoxelGrid(data))
         mesh.visual.face_colors = [0, 0, 255, 100]
         return mesh
 
     @staticmethod
-    def _get_mesh(vg, mask=None):
-        """Get a mesh."""
+    def _get_mesh(vg):
+        """Get a mesh within a region."""
         mesh = vg.marching_cubes
-        if mask is not None:
-            tri_indices = vg.points_to_indices(mesh.triangles_center)
-            mesh.update_faces(~mask[tuple(tri_indices.T)])
+        mask = VoxelGrid(self.annotation.raw).matrix
+        tri_indices = vg.points_to_indices(mesh.triangles_center)
+        mesh.update_faces(mask[tuple(tri_indices.T)])
         return mesh
-
-    @property
-    def boundary_mask(self):
-        """Get a mask of inner and boundary voxel of a region."""
-        if self._boundary_mask is None:
-            m = VoxelGrid(self.annotation.raw).matrix
-            outer_vg = VoxelGrid(self.annotation.raw)
-            outer_vg.encoding.data[m == 0] = -1000
-            outer_vg.encoding.data[m > 0] = 0
-            d1 = outer_vg.matrix
-            d2 = outer_vg.matrix
-            d1[:-1] += d2[1:]
-            d1[1:] += d2[:-1]
-            d1[:, :-1] += d2[:, 1:]
-            d1[:, 1:] += d2[:, :-1]
-            d1[:, :, :-1] += d2[:, :, 1:]
-            d1[:, :, 1:] += d2[:, :, :-1]
-            self._boundary_mask = d1 > 0
-        return self._boundary_mask
 
     def get_layer_meshes(self, alpha=0.5, colors=None):
         """Get layer meshes."""
@@ -140,7 +121,7 @@ class MeshHelper(AtlasHelper):
                 data = self.annotation.raw
                 vg = VoxelGrid(data)
                 vg.encoding.data[data != layer] = False
-                mesh = self._get_mesh(vg, self.boundary_mask)
+                mesh = self._get_mesh(vg)
                 color = [int(255 * v) for v in matplotlib.colors.to_rgb(colors[i - 1])]
                 color.append(255 * alpha)
                 mesh.visual.face_colors = color

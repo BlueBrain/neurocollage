@@ -102,8 +102,7 @@ class MeshHelper(AtlasHelper):
         mesh.visual.face_colors = [0, 0, 255, 100]
         return mesh
 
-    @staticmethod
-    def _get_mesh(vg):
+    def _get_mesh(self, vg):
         """Get a mesh within a region."""
         mesh = vg.marching_cubes
         mask = VoxelGrid(self.annotation.raw).matrix

@@ -1,4 +1,5 @@
 """Unit tests for math module"""
+
 import unittest
 import warnings
 

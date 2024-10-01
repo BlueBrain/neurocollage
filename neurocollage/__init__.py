@@ -2,6 +2,7 @@
 
 A tool to create 2D morphology collage plots based on matplotlib.
 """
+
 import importlib.metadata
 
 from .collage import plot_2d_collage  # noqa: F401

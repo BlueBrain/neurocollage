@@ -1,4 +1,5 @@
 """3D collage module."""
+
 from copy import deepcopy
 
 import matplotlib

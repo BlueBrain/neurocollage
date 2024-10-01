@@ -1,4 +1,5 @@
 """Load circuit and convert to internal format."""
+
 from pathlib import Path
 
 import bluepy

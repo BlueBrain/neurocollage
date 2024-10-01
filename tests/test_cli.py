@@ -1,4 +1,5 @@
 """Tests for the neurocollage.cli module."""
+
 import neurocollage.cli as tested
 
 

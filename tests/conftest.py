@@ -1,4 +1,5 @@
 """Configuration for the pytest test suite."""
+
 # pylint: disable=redefined-outer-name
 from copy import deepcopy
 from itertools import cycle

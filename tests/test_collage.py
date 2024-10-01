@@ -1,4 +1,5 @@
 """Test collage module."""
+
 from pathlib import Path
 
 import neurocollage.collage as tested

@@ -1,4 +1,5 @@
-"""Tes planes module."""
+"""Test planes module."""
+
 from pathlib import Path
 
 from numpy.testing import assert_array_equal

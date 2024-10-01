@@ -1,4 +1,5 @@
 """Module with utils functions."""
+
 import numpy as np
 from neurom import load_morphology
 

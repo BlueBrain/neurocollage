@@ -1,4 +1,5 @@
 """Make collage on sonata circuit."""
+
 import neurocollage
 import neurocollage.loader
 

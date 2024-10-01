@@ -1,4 +1,5 @@
 """Make collage on legacy circuit."""
+
 import trimesh
 
 import neurocollage

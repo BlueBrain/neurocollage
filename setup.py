@@ -15,6 +15,7 @@ spec.loader.exec_module(module)
 VERSION = module.VERSION
 
 reqs = [
+    "bluepy>=1.3",
     "bluepysnap>=3.0.1",
     "brainbuilder>=0.20.1",
     "click>=8",
@@ -30,7 +31,8 @@ reqs = [
     "pyglet>=1.5.20,<2",
     "pyquaternion>=0.9.5",
     "pyquaternion>=0.9.5",
-    #"region_grower>=1.2.8",
+    "region_grower>=1.2.8",
+    "scikit-learn>=1.1",
     "scipy>=1.13",
     "shapely>=2",
     "tqdm>=4.60",
@@ -59,8 +61,8 @@ test_reqs = [
 
 setup(
     name="neurocollage",
-    author="bbp-ou-cells",
-    author_email="bbp-ou-cells@groupes.epfl.ch",
+    author="Blue Brain Project, EPFL",
+    author_email="",
     description="A tool to create 2D morphology collage plots based on matplotlib.",
     long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",

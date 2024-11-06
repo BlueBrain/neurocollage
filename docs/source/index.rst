@@ -9,3 +9,4 @@
    cli
    api_ref
    changelog
+   contributing

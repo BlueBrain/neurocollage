@@ -36,7 +36,7 @@ This package contains three main functions:
 * `get_layer_annotation`: can generate annotation of layers for plotting or other uses
 * `create_planes`: defines a set of planes to create collage plots, with various algorithms.
   Planes are sampled along a centerline, which can be straight aligned or not with world
-  coordinates or curved using an algorithm in `atlas_analysis` package. The first and last point
+  coordinates or curved using an algorithm from former `atlas_analysis` package. The first and last point
   of the centerline can be defined manually, or estimated internally to span the given region best.
 * `plot_collage`: make the collage plot, see API for possible arguments.
 
@@ -78,7 +78,6 @@ also provides examples of programmatic use of the `NeuroCollage` API with both t
 
 The development of this software was supported by funding to the Blue Brain Project,
 a research center of the École polytechnique fédérale de Lausanne (EPFL),
-from the Swiss government's ETH Board of the Swiss Federal Institutes of Technology
-and from the Human Brain Project's Specific Grant Agreement 3.
+from the Swiss government's ETH Board of the Swiss Federal Institutes of Technology.
 
 Copyright (c) 2022-2024 Blue Brain Project/EPFL

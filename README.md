@@ -8,7 +8,7 @@ A tool to create 2D morphology collage plots based on matplotlib.
 It is recommended to install ``NeuroCollage`` using [pip](https://pip.pypa.io/en/stable/):
 
 ```bash
-pip install --index-url https://bbpteam.epfl.ch/repository/devpi/simple neurocollage
+pip install neurocollage
 ```
 
 ## Usage
@@ -72,3 +72,13 @@ The `examples` folder contains a simple example on `S1` region of `SSCx` with `L
 also provides examples of programmatic use of the `NeuroCollage` API with both types of circuit formats.
 
 ![](doc/source/images/collage.png)
+
+
+## Funding & Acknowledgment
+
+The development of this software was supported by funding to the Blue Brain Project,
+a research center of the École polytechnique fédérale de Lausanne (EPFL),
+from the Swiss government's ETH Board of the Swiss Federal Institutes of Technology
+and from the Human Brain Project's Specific Grant Agreement 3.
+
+Copyright (c) 2022-2024 Blue Brain Project/EPFL

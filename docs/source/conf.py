@@ -16,10 +16,11 @@ from importlib import metadata
 
 # -- Project information -----------------------------------------------------
 
-project = "NeuroCollage"
+project_name = "NeuroCollage"
+package_name = "neurocollage"
 
 # The short X.Y version
-version = metadata.version("neurocollage")
+version = metadata.version(package_name)
 
 # The full version, including alpha/beta/rc tags
 release = version
@@ -64,10 +65,10 @@ html_theme = "sphinx-bluebrain-theme"
 # html_static_path = ['_static']
 
 html_theme_options = {
-    "metadata_distribution": "neurocollage",
+    "metadata_distribution": package_name,
 }
 
-html_title = project
+html_title = project_name
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = False
@@ -83,9 +84,6 @@ autodoc_default_options = {
 }
 
 intersphinx_mapping = {
-    # Uncomment these lines if you need them
-    # "numpy": ("https://numpy.org/doc/stable/", None),
-    # "pandas": ("https://pandas.pydata.org/docs", None),
     "python": ("https://docs.python.org/3", None),
 }
 

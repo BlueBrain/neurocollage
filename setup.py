@@ -1,18 +1,9 @@
 """Setup for the neurocollage package."""
 
-import importlib.util
 from pathlib import Path
 
 from setuptools import find_namespace_packages
 from setuptools import setup
-
-spec = importlib.util.spec_from_file_location(
-    "neurocollage.version",
-    "neurocollage/version.py",
-)
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
-VERSION = module.VERSION
 
 reqs = [
     "bluepysnap>=3.0.1",
@@ -60,19 +51,21 @@ test_reqs = [
 setup(
     name="neurocollage",
     author="Blue Brain Project, EPFL",
-    author_email="",
     description="A tool to create 2D morphology collage plots based on matplotlib.",
     long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    url="https://bbpteam.epfl.ch/documentation/projects/neurocollage",
+    url="https://neurocollage.readthedocs.io",
     project_urls={
-        "Tracker": "https://bbpteam.epfl.ch/project/issues/projects/CELLS/issues",
-        "Source": "https://bbpgitlab.epfl.ch/neuromath/neurocollage",
+        "Tracker": "https://github.com/BlueBrain/neurocollage/issues",
+        "Source": "https://github.com/BlueBrain/neurocollage",
     },
-    license="BBP-internal-confidential",
+    license="Apache License 2.0",
     packages=find_namespace_packages(include=["neurocollage*"]),
     python_requires=">=3.9",
-    version=VERSION,
+    use_scm_version=True,
+    setup_requires=[
+        "setuptools_scm",
+    ],
     install_requires=reqs,
     extras_require={
         "docs": doc_reqs,

@@ -9,7 +9,7 @@ copyright_year: '2022'
 distribution_name: neurocollage
 download_url: https://github.com/BlueBrain/neurocollage
 init_git: false
-maintainer: Adrien Berchet
+maintainer: Adrien Berchet (@adrien-berchet)
 package_name: neurocollage
 project_description: A tool to create 2D morphology collage plots based on matplotlib.
 project_name: NeuroCollage

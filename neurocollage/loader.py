@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-import bluepy
 import bluepysnap
 import pandas as pd
 
@@ -21,8 +20,8 @@ def get_cell_df_from_circuit(circuit_path, ext=None, group=None):
 # pylint: disable=inconsistent-return-statements
 def get_cell_df_from_circuit_legacy(circuit, ext=None, group=None):
     """Load data from legacy circuit."""
-    if isinstance(circuit, str):
-        circuit = bluepy.Circuit(circuit)
+    # if isinstance(circuit, str):
+    #    circuit = bluepy.Circuit(circuit)
     df = circuit.cells.get(group=group)
     path = circuit.morph._morph_path
     dirnames, _ext = circuit.morph._dispatch[circuit.morph._morph_type]

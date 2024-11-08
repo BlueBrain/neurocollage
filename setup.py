@@ -1,22 +1,11 @@
 """Setup for the neurocollage package."""
 
-import importlib.util
 from pathlib import Path
 
 from setuptools import find_namespace_packages
 from setuptools import setup
 
-spec = importlib.util.spec_from_file_location(
-    "neurocollage.version",
-    "neurocollage/version.py",
-)
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
-VERSION = module.VERSION
-
 reqs = [
-    "bluepy-configfile>=0.1.21",
-    "bluepy>=2.5.5",
     "bluepysnap>=3.0.1",
     "brainbuilder>=0.20.1",
     "click>=8",
@@ -32,9 +21,9 @@ reqs = [
     "pyglet>=1.5.20,<2",
     "pyquaternion>=0.9.5",
     "pyquaternion>=0.9.5",
-    "region_grower>=1.2.8",
+    "region_grower>=1.5.1",
+    "scikit-learn>=1.1",
     "scipy>=1.13",
-    "shapely>=2",
     "tqdm>=4.60",
     "trimesh>=3.23",
     "voxcell>=3.1.5",
@@ -61,20 +50,22 @@ test_reqs = [
 
 setup(
     name="neurocollage",
-    author="bbp-ou-cells",
-    author_email="bbp-ou-cells@groupes.epfl.ch",
+    author="Blue Brain Project, EPFL",
     description="A tool to create 2D morphology collage plots based on matplotlib.",
     long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    url="https://bbpteam.epfl.ch/documentation/projects/neurocollage",
+    url="https://neurocollage.readthedocs.io",
     project_urls={
-        "Tracker": "https://bbpteam.epfl.ch/project/issues/projects/CELLS/issues",
-        "Source": "https://bbpgitlab.epfl.ch/neuromath/neurocollage",
+        "Tracker": "https://github.com/BlueBrain/neurocollage/issues",
+        "Source": "https://github.com/BlueBrain/neurocollage",
     },
-    license="BBP-internal-confidential",
+    license="Apache License 2.0",
     packages=find_namespace_packages(include=["neurocollage*"]),
     python_requires=">=3.9",
-    version=VERSION,
+    use_scm_version=True,
+    setup_requires=[
+        "setuptools_scm",
+    ],
     install_requires=reqs,
     extras_require={
         "docs": doc_reqs,

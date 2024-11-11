@@ -13,6 +13,7 @@
 import shutil
 import tempfile
 from importlib import metadata
+from pathlib import Path
 
 # -- Project information -----------------------------------------------------
 
@@ -88,7 +89,7 @@ intersphinx_mapping = {
 }
 
 
-_README = "../README.md"
+_README = str(Path(__file__).parent.parent.parent / "README.md")
 _README_TMP = tempfile.NamedTemporaryFile()  # pylint: disable=consider-using-with
 self_readme_copy_path = _README_TMP.name
 

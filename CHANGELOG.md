@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.7](https://github.com/BlueBrain/neurocollage/compare/0.3.6..0.3.7)
+
+> 11 November 2024
+
+### Documentation Changes
+
+- Fix RTD build (Adrien Berchet - [#4](https://github.com/BlueBrain/neurocollage/pull/4))
+
 ## [0.3.6](https://github.com/BlueBrain/neurocollage/compare/0.3.5..0.3.6)
 
 > 8 November 2024

@@ -141,7 +141,7 @@ class MeshHelper(AtlasHelper):
                 data = self.annotation.raw
                 vg = VoxelGrid(data)
                 vg.encoding.data[data != layer] = False
-                mesh = self._get_mesh(vg, self.boundary_mask)
+                mesh = self._get_mesh(vg)
                 color = [int(255 * v) for v in matplotlib.colors.to_rgb(colors[i - 1])]
                 color.append(255 * alpha)
                 mesh.visual.face_colors = color

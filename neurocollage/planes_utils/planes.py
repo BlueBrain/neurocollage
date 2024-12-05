@@ -492,9 +492,7 @@ def _smoothing(path, ctrl_point_count=10):
     curve.ctrlpts = _split_path(path, ctrl_point_count).tolist()
     # Auto-generate knot vector
     curve.knotvector = utilities.generate_knot_vector(curve.degree, curve.ctrlpts_size)
-    print(curve.knotvector)
     curve.delta = 0.01
-
     step_count = 100
     steps = np.linspace(0, 1, step_count, endpoint=True)
     return np.asarray(curve.evaluate_list(steps))

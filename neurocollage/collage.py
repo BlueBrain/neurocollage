@@ -455,7 +455,7 @@ def plot_3d_collage(
     centerline,
     sample=10,
     filename=None,
-    show=False,
+    show=True,
 ):
     """Plot 3d collage with trimesh."""
     mesh_helper = MeshHelper(atlas_path, region, hemisphere)
@@ -470,9 +470,13 @@ def plot_3d_collage(
             mesh_path = Path(atlas_path["structure"]).parent / boundary["path"]
             if mesh_path.is_dir():
                 for _mesh_path in mesh_path.iterdir():
-                    boundary_meshes.append(trimesh.load_mesh(_mesh_path))
+                    _mesh = trimesh.load_mesh(_mesh_path)
+                    _mesh.visual.face_colors = [100, 100, 100, 100]
+                    boundary_meshes.append(_mesh)
             else:
-                boundary_meshes.append(trimesh.load_mesh(mesh_path))
+                _mesh = trimesh.load_mesh(mesh_path)
+                _mesh.visual.face_colors = [100, 100, 100, 100]
+                boundary_meshes.append(_mesh)
 
     data = boundary_meshes + plane_data + cell_data + centerline_data
     mesh_helper.render(data=data, filename=filename)

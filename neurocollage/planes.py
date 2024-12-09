@@ -64,9 +64,12 @@ def slice_n_cells(cells, n_cells, random_state=0):
 
     sampled_cells = []
     for mtype in cells.mtype.unique():
-        samples = cells[cells.mtype == mtype].sample(
-            n=min(n_cells, len(cells[cells.mtype == mtype])), random_state=random_state
-        )
+        if n_cells > 1:
+            samples = cells[cells.mtype == mtype].sample(
+                n=min(n_cells, len(cells[cells.mtype == mtype])), random_state=random_state
+            )
+        if n_cells < 1:
+            samples = cells[cells.mtype == mtype].sample(frac=n_cells, random_state=random_state)
         sampled_cells.append(samples)
 
     if len(sampled_cells) > 0:

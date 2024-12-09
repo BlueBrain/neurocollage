@@ -33,5 +33,5 @@ def load_insitu_morphology(df, gid):
     # pylint: disable=cell-var-from-loop
     def trans(p):
         return p + df.loc[gid, ["x", "y", "z"]].to_numpy().T
-
-    return m.transform(trans)
+    p = m.transform(trans)
+    return p
